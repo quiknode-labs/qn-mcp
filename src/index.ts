@@ -143,12 +143,12 @@ server.tool(
 server.tool(
   "get-rpc-usage",
   {
-    startTime: z.number(),
-    endTime: z.number(),
+    start_time: z.number(),
+    end_time: z.number(),
   },
-  { description: "Get the usage data for the user's QuickNode RPC endpoints. The startTime and endTime parameters are unix timestamps in seconds to filter the usage data by time range" },
-  async ({ startTime, endTime }) => {
-    const usage = await client.getRpcUsage({ startTime, endTime });
+  { description: "Get the usage data for the user's QuickNode RPC endpoints. The start_time and end_time parameters are unix timestamps in seconds to filter the usage data by time range" },
+  async ({ start_time, end_time }) => {
+    const usage = await client.getRpcUsage({ start_time, end_time });
     return {
       content: [{
         type: "text",

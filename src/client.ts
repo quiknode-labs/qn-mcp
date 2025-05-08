@@ -111,12 +111,12 @@ interface GetUsageQueryParams extends QueryParams {
    * start_time integer
    * Specifies the start of the time period for which the usage data is to be retrieved
    */
-  startTime: number;
+  start_time: number;
   /**
    * end_time integer
    * Specifies the end of the time period for which the usage data is to be retrieved
    */
-  endTime: number;
+  end_time: number;
 }
 
 
