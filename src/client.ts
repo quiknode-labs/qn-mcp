@@ -35,7 +35,7 @@ export class Client {
     options: RequestOptions = {}
   ): Promise<T> {
     const url = new URL(path.startsWith('/') ? path.slice(1) : path, this.baseUrl);
-    
+
     // Add query parameters
     if (options.params) {
       Object.entries(options.params).forEach(([key, value]) => {
@@ -124,7 +124,7 @@ export class QuickNodeClient extends Client {
   constructor(options: ClientOptions) {
     super(options);
   }
-  
+
   async listEndpoints(limit: number = 10, offset: number = 0) {
     // @ts-ignore
     const { data } = await this.get('/v0/endpoints', {
@@ -158,6 +158,24 @@ export class QuickNodeClient extends Client {
       params: queryParams,
     });
   }
+
+  async getRpcUsageByEndpoint(queryParams: GetUsageQueryParams) {
+    return this.get('/v0/usage/rpc/by-endpoint', {
+      params: queryParams,
+    });
+  }
+
+  async getRpcUsageByMethod(queryParams: GetUsageQueryParams) {
+    return this.get('/v0/usage/rpc/by-method', {
+      params: queryParams,
+    });
+  }
+
+  async getRpcUsageByChain(queryParams: GetUsageQueryParams) {
+    return this.get('/v0/usage/rpc/by-chain', {
+      params: queryParams,
+    });
+  }
 }
 
 
@@ -171,5 +189,3 @@ const endpointNameFromUrl = (url: string) => {
   }
   return match[1];
 }
-
-
