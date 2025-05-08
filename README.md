@@ -3,7 +3,34 @@
 QuickNode platform MCP server
 
 
-## How to run locally
+## Getting Started
+
+Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or alike
+
+```json
+{
+  "mcpServers": {
+    "quicknode-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "quiknode-labs/mc3po"
+      ],
+      "env": {
+        "QUICKNODE_API_KEY": "<qn-token>"
+      }
+    }
+  }
+}
+```
+
+Replace <qn-token> with a QuickNode API token. Can be created on the [QuickNode dashboard](https://dashboard.quicknode.com/api-keys)
+
+
+
+## Development Guide
+
+### How to run locally
 
 To run from local repo, put this server config on your `claude_desktop_config.json`, Cursor's `mcp.json` or alike
 
@@ -12,12 +39,12 @@ To run from local repo, put this server config on your `claude_desktop_config.js
   "mcpServers": {
     "quicknode-mcp": {
       "command": "<absolute-path-to-repo>/mc3po/dist/index.js",
-            "env": {
-              "QUICKNODE_API_KEY": "<qn-token>",
-                "QUICKNODE_API_URL": "https://api.quicknode.dev"
-            }
-        }
+      "env": {
+        "QUICKNODE_API_KEY": "<qn-token>",
+        "QUICKNODE_API_URL": "https://api.quicknode.dev"
+      }
     }
+  }
 }
 ```
 
