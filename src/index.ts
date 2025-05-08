@@ -140,7 +140,24 @@ server.tool(
   }
 );
 
-
+server.tool(
+  "get-rpc-usage",
+  {
+    startTime: z.number(),
+    endTime: z.number(),
+  },
+  { description: "Get the usage data for the user's QuickNode RPC endpoints. The startTime and endTime parameters are unix timestamps in seconds to filter the usage data by time range" },
+  async ({ startTime, endTime }) => {
+    const usage = await client.getRpcUsage({ startTime, endTime });
+    return {
+      content: [{
+        type: "text",
+        // @ts-ignore
+        text: JSON.stringify(usage.data, null, 2)
+      }]
+    };
+  }
+);
 
 async function runServer() {
   const transport = new StdioServerTransport();

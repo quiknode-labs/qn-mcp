@@ -4,8 +4,10 @@ export interface ClientOptions {
   headers?: Record<string, string>;
 }
 
+type QueryParams = Record<string, string | number>;
+
 export interface RequestOptions {
-  params?: Record<string, string>;
+  params?: QueryParams;
   headers?: Record<string, string>;
   body?: any;
 }
@@ -37,7 +39,11 @@ export class Client {
     // Add query parameters
     if (options.params) {
       Object.entries(options.params).forEach(([key, value]) => {
-        url.searchParams.append(key, value);
+        if (typeof value === 'string') {
+          url.searchParams.append(key, value);
+        } else {
+          url.searchParams.append(key, value.toString());
+        }
       });
     }
 
@@ -100,6 +106,19 @@ interface CreateEndpointRequest {
   network: string;
 }
 
+interface GetUsageQueryParams extends QueryParams {
+  /**
+   * start_time integer
+   * Specifies the start of the time period for which the usage data is to be retrieved
+   */
+  startTime: number;
+  /**
+   * end_time integer
+   * Specifies the end of the time period for which the usage data is to be retrieved
+   */
+  endTime: number;
+}
+
 
 export class QuickNodeClient extends Client {
   constructor(options: ClientOptions) {
@@ -132,6 +151,12 @@ export class QuickNodeClient extends Client {
 
   async getChains() {
     return this.get('/v0/chains');
+  }
+
+  async getRpcUsage(queryParams: GetUsageQueryParams) {
+    return this.get('/v0/usage/rpc', {
+      params: queryParams,
+    });
   }
 }
 
