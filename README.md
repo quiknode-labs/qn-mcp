@@ -2,7 +2,6 @@
 
 QuickNode platform MCP server
 
-
 ## Getting Started
 
 Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or alike
@@ -12,10 +11,7 @@ Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or 
   "mcpServers": {
     "quicknode-mcp": {
       "command": "npx",
-      "args": [
-        "-y",
-        "quiknode-labs/mc3po"
-      ],
+      "args": ["-y", "quiknode-labs/mc3po"],
       "env": {
         "QUICKNODE_API_KEY": "<qn-token>"
       }
@@ -25,8 +21,6 @@ Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or 
 ```
 
 Replace <qn-token> with a QuickNode API token. Can be created on the [QuickNode dashboard](https://dashboard.quicknode.com/api-keys)
-
-
 
 ## Development Guide
 
@@ -51,4 +45,3 @@ To run from local repo, put this server config on your `claude_desktop_config.js
 can skip `QUICKNODE_API_URL` and it'll default to api.quicknode.com.
 
 Then restart Claude/reload Cursor config or alike, you should see resources/tools get picked up by the chat client.
-
