@@ -37,11 +37,9 @@ server.resource(
       async (data) => {
         const endpoints = await client.listEndpoints();
         return {
-          // @ts-ignore
           resources: endpoints.map((endpoint) => ({
             name: endpoint.name,
             uri: `endpoint://${endpoint.name}`,
-            description: endpoint.description,
           })),
         };
       },
@@ -215,6 +213,30 @@ server.tool(
     };
   }
 );
+
+server.tool(
+  "get-endpoint-logs",
+  {
+    endpoint_id: z.string(),
+    from: z.string(),
+    to: z.string(),
+    limit: z.number(),
+    include_details: z.boolean(),
+    next_at: z.string(),
+  },
+  { description: "Get the logs for a specific QuickNode endpoint" },
+  async ({ endpoint_id, from, to, limit, include_details, next_at }) => {
+    const logs = await client.getEndpointLogs({ endpoint_id, from, to, limit, include_details, next_at });
+    return {
+      content: [{
+        type: "text",
+        text: JSON.stringify(logs.data, null, 2)
+      }],
+      nextCursor: logs.next_at,
+    };
+  }
+);
+
 
 async function runServer() {
   const transport = new StdioServerTransport();

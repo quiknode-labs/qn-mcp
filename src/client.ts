@@ -4,7 +4,14 @@ export interface ClientOptions {
   headers?: Record<string, string>;
 }
 
-type QueryParams = Record<string, string | number>;
+interface QueryParams extends Record<string, string | number | boolean>{};
+
+interface BaseData extends Record<string, unknown> {}
+
+export interface BaseResponse<T extends BaseData[] | BaseData> {
+  data: T;
+  error: string | null;
+}
 
 export interface RequestOptions {
   params?: QueryParams;
@@ -29,7 +36,7 @@ export class Client {
     };
   }
 
-  private async request<T>(
+  private async request<T extends BaseResponse<BaseData[] | BaseData>>(
     method: string,
     path: string,
     options: RequestOptions = {}
@@ -80,23 +87,23 @@ export class Client {
     }
   }
 
-  protected async get<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  protected async get<T extends BaseResponse<BaseData[] | BaseData>>(path: string, options: RequestOptions = {}): Promise<T> {
     return this.request<T>('GET', path, options);
   }
 
-  protected async post<T>(path: string, body: any, options: RequestOptions = {}): Promise<T> {
+  protected async post<T extends BaseResponse<BaseData[] | BaseData>>(path: string, body: any, options: RequestOptions = {}): Promise<T> {
     return this.request<T>('POST', path, { ...options, body });
   }
 
-  protected async put<T>(path: string, body: any, options: RequestOptions = {}): Promise<T> {
+  protected async put<T extends BaseResponse<BaseData[] | BaseData>>(path: string, body: any, options: RequestOptions = {}): Promise<T> {
     return this.request<T>('PUT', path, { ...options, body });
   }
 
-  protected async patch<T>(path: string, body: any, options: RequestOptions = {}): Promise<T> {
+  protected async patch<T extends BaseResponse<BaseData[] | BaseData>>(path: string, body: any, options: RequestOptions = {}): Promise<T> {
     return this.request<T>('PATCH', path, { ...options, body });
   }
 
-  protected async delete<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  protected async delete<T extends BaseResponse<BaseData[] | BaseData>>(path: string, options: RequestOptions = {}): Promise<T> {
     return this.request<T>('DELETE', path, options);
   }
 }
@@ -119,6 +126,80 @@ interface GetUsageQueryParams extends QueryParams {
   end_time: number;
 }
 
+interface GetEndpointLogsQueryParams extends QueryParams {
+  endpoint_id: string;
+  /**
+   * The start timestamp encoded in ISO8601 format
+   */
+  from: string;
+  /**
+   * The end timestamp encoded in ISO8601 format
+   */
+  to: string;
+  /**
+   * Number of logs (1-100, default: 20)
+   */
+  limit: number;
+  /**
+   * Includes request/response details. The default value is set to be false
+   */
+  include_details: boolean;
+  /**
+   * Pagination token from previous response
+   */
+  next_at: string;
+}
+
+interface GetEndpointsResponse extends BaseResponse<{
+  id: string;
+  label: string;
+  chain: string;
+  network: string;
+  http_url: string;
+  wss_url: string;
+  error: string;
+}[]>{}
+
+interface GetEndpointLogsResponse extends BaseResponse<{
+  /**
+   * The timestamp when the log was recorded
+   */
+  timestamp: string;
+  /**
+   * The name of the method invoked
+   */
+  method: string;
+  /**
+   * The name of the network on which the method was called
+   */
+  network: string;
+  /**
+   * The HTTP method used for the request
+   */
+  http_method: string;
+  /**
+   * The HTTP status code returned by the request
+   */
+  status: number;
+  /**
+   * The application-specific error code returned
+   */
+  error_code: number;
+  /**
+   * The unique identifier for the request
+   */
+  request_id: string;
+  /**
+   * The request URL
+   */
+  url: string;
+  /**
+   * Additional error details if available (nullable)
+   */
+  details: string | null;
+}[]> {
+  next_at: string;
+}
 
 export class QuickNodeClient extends Client {
   constructor(options: ClientOptions) {
@@ -126,15 +207,13 @@ export class QuickNodeClient extends Client {
   }
 
   async listEndpoints(limit: number = 10, offset: number = 0) {
-    // @ts-ignore
-    const { data } = await this.get('/v0/endpoints', {
+    const { data } = await this.get<GetEndpointsResponse>('/v0/endpoints', {
       params: {
         limit: limit.toString(),
         offset: offset.toString(),
       },
     });
 
-    // @ts-ignore
     return data.map((endpoint) => ({
       ...endpoint,
       name: endpointNameFromUrl(endpoint.http_url),
@@ -174,15 +253,18 @@ export class QuickNodeClient extends Client {
   async getRpcUsageByChain(queryParams: GetUsageQueryParams) {
     return this.get('/v0/usage/rpc/by-chain', {
       params: queryParams,
+    });    
+  }
+
+  async getEndpointLogs(queryParams: GetEndpointLogsQueryParams) {
+    return this.get<GetEndpointLogsResponse>(`/v0/endpoints/${queryParams.endpoint_id}/logs`, {
+      params: queryParams,
     });
   }
 }
 
 
-
 const endpointNameFromUrl = (url: string) => {
-  // URL is like https://staging-twilight-restless-breeze.quiknode.pro/7d4081fff499f8f8800b3b7a9780f2d19d53e4bf/
-  // we need to extract in between https:// and .quiknode.pro/
   const match = url.match(/https:\/\/(.*)\.quiknode\.pro\//);
   if (!match) {
     throw new Error(`Invalid URL: ${url}`);
