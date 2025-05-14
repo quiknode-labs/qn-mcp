@@ -10,8 +10,6 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext"
   },
-  "include": [
-    "./**/*.ts"
-  ],
+  "include": ["./**/*.ts"],
   "exclude": ["node_modules"]
 }
