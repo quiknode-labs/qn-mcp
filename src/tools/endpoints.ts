@@ -129,6 +129,44 @@ const deleteMethodRateLimitArgs = {
     ),
 };
 
+const updateSecurityOptionsArgs = {
+  ...genericArgs.endpointIdArgs,
+  tokens: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe("Controls the token-based authentication mechanism"),
+  referrers: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe(
+      "The URL or domain that is allowed to access the specific API endpoint",
+    ),
+  jwts: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe(
+      "Configures JSON Web Tokens (JWTs) for secure authentication and authorization",
+    ),
+  ips: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe("Specifies IP address-based restrictions or permissions"),
+  domainMasks: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe("Configures the masking or restriction of specific domains"),
+  hsts: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe("The HTTP Strict Transport Security (HSTS)"),
+  cors: z
+    .enum(["enabled", "disabled"])
+    .optional()
+    .describe(
+      "Configures Cross-Origin Resource Sharing (CORS) policies to control how resources can be accessed by external domains",
+    ),
+};
+
 export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoints",
@@ -385,6 +423,66 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
           {
             type: "text",
             text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "get-endpoint-security-options",
+    {
+      description: "Get security options for a specific QuickNode endpoint",
+      inputSchema: { ...genericArgs.endpointIdArgs },
+    },
+    async ({ endpoint_id }) => {
+      const securityOptions = await client.getSecurityOptions(endpoint_id);
+      return {
+        structuredContent: { data: securityOptions.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(securityOptions.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "update-endpoint-security-options",
+    {
+      description: "Update security options for a specific QuickNode endpoint",
+      inputSchema: { ...updateSecurityOptionsArgs },
+    },
+    async ({
+      endpoint_id,
+      tokens,
+      referrers,
+      jwts,
+      ips,
+      domainMasks,
+      hsts,
+      cors,
+    }) => {
+      const options: any = {};
+      if (tokens !== undefined) options.tokens = tokens;
+      if (referrers !== undefined) options.referrers = referrers;
+      if (jwts !== undefined) options.jwts = jwts;
+      if (ips !== undefined) options.ips = ips;
+      if (domainMasks !== undefined) options.domainMasks = domainMasks;
+      if (hsts !== undefined) options.hsts = hsts;
+      if (cors !== undefined) options.cors = cors;
+
+      const securityOptions = await client.updateSecurityOptions(endpoint_id, {
+        options,
+      });
+      return {
+        structuredContent: { data: securityOptions.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(securityOptions.data, null, 2),
           },
         ],
       };

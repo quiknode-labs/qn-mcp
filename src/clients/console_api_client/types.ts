@@ -383,3 +383,21 @@ export interface DeleteMethodRateLimitResponse
   extends BaseResponse<{
     result: boolean;
   }> {}
+
+export interface GetSecurityOptionsResponse
+  extends BaseResponse<SecurityOptionData[]> {}
+
+export interface SecurityOptionsRequest {
+  options: {
+    tokens?: "enabled" | "disabled";
+    referrers?: "enabled" | "disabled";
+    jwts?: "enabled" | "disabled";
+    ips?: "enabled" | "disabled";
+    domainMasks?: "enabled" | "disabled";
+    hsts?: "enabled" | "disabled";
+    cors?: "enabled" | "disabled";
+  };
+}
+
+export interface UpdateSecurityOptionsResponse
+  extends BaseResponse<SecurityOptionData[]> {}

@@ -22,11 +22,14 @@ import type {
   GetRpcUsageByEndpointResponse,
   GetRpcUsageByMethodResponse,
   GetRpcUsageResponse,
+  GetSecurityOptionsResponse,
   GetUsageQueryParams,
+  SecurityOptionsRequest,
   UpdateMethodRateLimitRequest,
   UpdateMethodRateLimitResponse,
   UpdateRateLimitsRequest,
   UpdateRateLimitsResponse,
+  UpdateSecurityOptionsResponse,
 } from "./types";
 
 export class QuickNodeClient extends Client {
@@ -169,6 +172,22 @@ export class QuickNodeClient extends Client {
   async deleteMethodRateLimit(endpointId: string, methodRateLimitId: string) {
     return this.delete<DeleteMethodRateLimitResponse>(
       `/v0/endpoints/${endpointId}/method-rate-limits/${methodRateLimitId}`,
+    );
+  }
+
+  async getSecurityOptions(endpointId: string) {
+    return this.get<GetSecurityOptionsResponse>(
+      `/v0/endpoints/${endpointId}/security_options`,
+    );
+  }
+
+  async updateSecurityOptions(
+    endpointId: string,
+    body: SecurityOptionsRequest,
+  ) {
+    return this.patch<UpdateSecurityOptionsResponse>(
+      `/v0/endpoints/${endpointId}/security_options`,
+      body,
     );
   }
 }
