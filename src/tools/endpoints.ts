@@ -21,8 +21,9 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
 
   server.tool(
     "get-endpoint",
+    "Get a specific web3 QuickNode endpoint details by id",
     {
-      id: z.string(),
+      id: z.string().describe("The id of the endpoint to get"),
     },
     { description: "Get a specific web3 QuickNode endpoint by id" },
     async ({ id }) => {
@@ -40,6 +41,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
 
   server.tool(
     "get-endpoint-logs",
+    "Get the request/response logs for a specific QuickNode endpoint",
     {
       endpoint_id: z.string(),
       from: z.string(),

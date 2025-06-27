@@ -6,16 +6,19 @@ import type {
   GetEndpointLogsResponse,
   GetEndpointsResponse,
   GetRpcEndpointSecurityOptionsResponse,
+  GetRpcUsageResponse,
   GetUsageQueryParams,
 } from "./types";
 
 export class QuickNodeClient extends Client {
   constructor(options: ClientOptions) {
     super({
-      ...options, headers: {
+      ...options,
+      headers: {
         ...options.headers,
-        "x-qn-sdk": "qn-mcp"
-    }});
+        "x-qn-sdk": "qn-mcp",
+      },
+    });
   }
 
   async listEndpoints(limit: number = 10, offset: number = 0) {
@@ -45,7 +48,7 @@ export class QuickNodeClient extends Client {
   }
 
   async getRpcUsage(queryParams: GetUsageQueryParams) {
-    return this.get("/v0/usage/rpc", {
+    return this.get<GetRpcUsageResponse>("/v0/usage/rpc", {
       params: queryParams,
     });
   }

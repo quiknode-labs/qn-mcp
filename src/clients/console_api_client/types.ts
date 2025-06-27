@@ -64,7 +64,19 @@ export interface GetRpcEndpointSecurityOptionsResponse
       option: string;
       status: string;
     }[]
-  > {}
+  > { }
+
+export interface GetRpcUsageResponse
+  extends BaseResponse<
+    {
+      start_time: number;
+      end_time: number;
+      credits_used: number;
+      credits_remaining: number | null;
+      limit: number | null;
+      overages: number | null;
+    }
+  > { }
 
 export interface GetEndpointLogsResponse
   extends BaseResponse<
