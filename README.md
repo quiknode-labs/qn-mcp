@@ -28,9 +28,9 @@ Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or 
   "mcpServers": {
     "quicknode-mcp": {
       "command": "npx",
-      "args": ["-y", "quiknode-labs/qn-mcp"],
+      "args": ["-y", "@quicknode/mcp"],
       "env": {
-        "QUICKNODE_API_KEY": "<qn-token>"
+        "QUICKNODE_API_KEY": "<replace-with-qn-token>"
       }
     }
   }
@@ -38,6 +38,28 @@ Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or 
 ```
 
 Replace `<qn-token>` with a QuickNode API token. Can be created on the [QuickNode dashboard](https://dashboard.quicknode.com/api-keys)
+
+---
+
+## 📋 Notes
+
+This MCP server requires **Node.js 18.18.0 or higher**.
+
+### Installing Node.js
+
+If you don't have Node.js installed or need to upgrade:
+
+**Download from nodejs.org**
+
+- Visit [nodejs.org](https://nodejs.org/)
+- Download and install the LTS version (recommended)
+
+**Verify your installation:**
+
+```bash
+node --version  # Should show v18.18.0 or higher
+npm --version   # Should show npm version
+```
 
 ---
 
@@ -53,11 +75,40 @@ To run from local repo, put this server config on your `claude_desktop_config.js
     "quicknode-mcp": {
       "command": "<absolute-path-to-repo>/qn-mcp/dist/index.js",
       "env": {
-        "QUICKNODE_API_KEY": "<qn-token>"
+        "QUICKNODE_API_KEY": "<replace-with-qn-token>"
       }
     }
   }
 }
 ```
 
+To install dependencies
+
+```bash
+pnpm i
+```
+
+and kickstart the build with
+
+```bash
+pnpm build
+```
+
+can also run with watch mode
+
+```bash
+pnpm watch
+```
+
 Then restart Claude/reload Cursor config or similar, you should see resources/tools get picked up by the chat client.
+
+---
+
+## 💬 Feedback & Support
+
+We'd love to hear from you! If you have questions, suggestions, or run into any issues:
+
+- 📧 **Email us:** [devex@quicknode.com](mailto:devex@quicknode.com)
+- 🆘 **General support:** [QuickNode Support](https://support.quicknode.com/)
+
+Your feedback helps us make QuickNode even better! 🚀
