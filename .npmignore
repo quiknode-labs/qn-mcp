@@ -1,0 +1,4 @@
+jest.config.js
+dist/**/__tests__/**
+src
+*.tgz

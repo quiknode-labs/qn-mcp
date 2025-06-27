@@ -1,10 +1,7 @@
 {
-  "name": "qn-mcp",
-  "version": "1.0.0",
-  "description": "MCP Server for interacting with QuickNode, leading Web3 infrastructure provider",
-  "files": [
-    "dist"
-  ],
+  "name": "@quicknode/mcp-server",
+  "version": "0.0.1",
+  "description": "MCP Server for building web3 infrastructure with QuickNode, leading Web3 infrastructure provider",
   "bin": {
     "qn-mcp": "dist/index.js"
   },
