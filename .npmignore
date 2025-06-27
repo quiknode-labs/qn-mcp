@@ -1,4 +1,5 @@
 jest.config.js
 dist/**/__tests__/**
+dist/test
 src
 *.tgz
