@@ -5,7 +5,7 @@ export interface ClientOptions {
 }
 
 export interface QueryParams
-  extends Record<string, string | number | boolean> {}
+  extends Record<string, string | number | boolean | undefined> {}
 
 export interface BaseData extends Record<string, unknown> {}
 
@@ -52,7 +52,7 @@ export class Client {
       Object.entries(options.params).forEach(([key, value]) => {
         if (typeof value === "string") {
           url.searchParams.append(key, value);
-        } else {
+        } else if (value !== undefined) {
           url.searchParams.append(key, value.toString());
         }
       });

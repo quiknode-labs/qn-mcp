@@ -42,82 +42,206 @@ export interface GetEndpointLogsQueryParams extends QueryParams {
   /**
    * Pagination token from previous response
    */
-  next_at: string;
+  next_at?: string;
 }
 
-export interface GetEndpointsResponse
-  extends BaseResponse<
-    {
-      id: string;
-      label: string;
-      chain: string;
-      network: string;
-      http_url: string;
-      wss_url: string;
-      error: string;
-    }[]
-  > {}
+// Security configuration types
+export interface SecurityOptions {
+  tokens: boolean;
+  jwts: boolean;
+  domainMasks: boolean;
+  ips: boolean;
+  hosts: boolean;
+  referrers: boolean;
+  validHosts: boolean;
+  requestFilters: boolean;
+  debugAuthErrors: boolean;
+  enforceChainNetwork: boolean;
+  ipCustomHeader: boolean;
+  hsts: boolean;
+  cors: boolean;
+}
+
+export interface JwtConfig {
+  id: string;
+  public_key: string;
+  kid: string;
+  name: string;
+}
+
+export interface TokenConfig {
+  id: string;
+  token: string;
+}
+
+export interface ReferrerConfig {
+  id: string;
+  referrer: string;
+}
+
+export interface DomainMaskConfig {
+  id: string;
+  domain: string;
+}
+
+export interface IpConfig {
+  id: string;
+  ip: string;
+}
+
+export interface RateLimits {
+  rate_limit_by_ip: boolean;
+  account: number;
+  rps: number;
+  rpm: number;
+  rpd: number;
+}
+
+export interface SecurityConfig {
+  options: SecurityOptions;
+  jwts: JwtConfig[];
+  tokens: TokenConfig[];
+  referrers: ReferrerConfig[];
+  domainMasks: DomainMaskConfig[];
+  ips: IpConfig[];
+}
+
+// Endpoint response types
+export interface EndpointData extends Record<string, unknown> {
+  id: string;
+  label: string;
+  chain: string;
+  network: string;
+  http_url: string;
+  wss_url: string;
+  security: SecurityConfig;
+  rate_limits: RateLimits;
+  error?: string;
+}
+
+export interface GetEndpointsResponse extends BaseResponse<EndpointData[]> {}
+
+export interface GetEndpointResponse extends BaseResponse<EndpointData> {}
+
+export interface CreateEndpointResponse extends BaseResponse<EndpointData> {}
+
+export interface ChainData extends Record<string, unknown> {
+  slug: string;
+  networks: {
+    slug: string;
+    name: string;
+  }[];
+}
+
+export interface GetChainsResponse extends BaseResponse<ChainData[]> {}
+
+export interface SecurityOptionData extends Record<string, unknown> {
+  option: string;
+  status: string;
+}
 
 export interface GetRpcEndpointSecurityOptionsResponse
-  extends BaseResponse<
-    {
-      option: string;
-      status: string;
-    }[]
-  > { }
+  extends BaseResponse<SecurityOptionData[]> {}
 
-export interface GetRpcUsageResponse
-  extends BaseResponse<
-    {
-      start_time: number;
-      end_time: number;
-      credits_used: number;
-      credits_remaining: number | null;
-      limit: number | null;
-      overages: number | null;
-    }
-  > { }
+// Usage response types
+export interface RpcUsageData extends Record<string, unknown> {
+  credits_used: number;
+  credits_remaining: number | null;
+  limit: number | null;
+  overages: number | null;
+  start_time: number;
+  end_time: number;
+  error?: string;
+}
+
+export interface RpcUsageByEndpointData extends Record<string, unknown> {
+  name: string;
+  label: string;
+  chain: string;
+  status: string;
+  network: string;
+  credits_used: number;
+  methods_breakdown: {
+    method_name: string;
+    credits_used: number;
+    archive: boolean;
+  }[];
+}
+
+export interface RpcUsageByMethodData extends Record<string, unknown> {
+  method_name: string;
+  credits_used: number;
+  archive: boolean;
+}
+
+export interface RpcUsageByChainData extends Record<string, unknown> {
+  name: string;
+  credits_used: number;
+}
+
+export interface GetRpcUsageResponse extends BaseResponse<RpcUsageData> {}
+
+export interface GetRpcUsageByEndpointResponse
+  extends BaseResponse<{
+    endpoints: RpcUsageByEndpointData[];
+    start_time: number;
+    end_time: number;
+  }> {}
+
+export interface GetRpcUsageByMethodResponse
+  extends BaseResponse<{
+    methods: RpcUsageByMethodData[];
+    start_time: number;
+    end_time: number;
+  }> {}
+
+export interface GetRpcUsageByChainResponse
+  extends BaseResponse<{
+    chains: RpcUsageByChainData[];
+    start_time: number;
+    end_time: number;
+  }> {}
+
+export interface EndpointLogData extends Record<string, unknown> {
+  /**
+   * The timestamp when the log was recorded
+   */
+  timestamp: string;
+  /**
+   * The name of the method invoked
+   */
+  method: string;
+  /**
+   * The name of the network on which the method was called
+   */
+  network: string;
+  /**
+   * The HTTP method used for the request
+   */
+  http_method: string;
+  /**
+   * The HTTP status code returned by the request
+   */
+  status: number;
+  /**
+   * The application-specific error code returned
+   */
+  error_code: number;
+  /**
+   * The unique identifier for the request
+   */
+  request_id: string;
+  /**
+   * The request URL
+   */
+  url: string;
+  /**
+   * Additional error details if available (nullable)
+   */
+  details: string | null;
+}
 
 export interface GetEndpointLogsResponse
-  extends BaseResponse<
-    {
-      /**
-       * The timestamp when the log was recorded
-       */
-      timestamp: string;
-      /**
-       * The name of the method invoked
-       */
-      method: string;
-      /**
-       * The name of the network on which the method was called
-       */
-      network: string;
-      /**
-       * The HTTP method used for the request
-       */
-      http_method: string;
-      /**
-       * The HTTP status code returned by the request
-       */
-      status: number;
-      /**
-       * The application-specific error code returned
-       */
-      error_code: number;
-      /**
-       * The unique identifier for the request
-       */
-      request_id: string;
-      /**
-       * The request URL
-       */
-      url: string;
-      /**
-       * Additional error details if available (nullable)
-       */
-      details: string | null;
-    }[]
-  > {
+  extends BaseResponse<EndpointLogData[]> {
   next_at: string;
 }

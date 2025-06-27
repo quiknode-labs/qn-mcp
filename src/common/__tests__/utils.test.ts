@@ -116,8 +116,14 @@ describe("Timestamp Conversion Utilities", () => {
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#date_rollover:~:text=If%20any%20parameter%20overflows%20its%20defined%20bounds%2C%20it%20%22carries%20over%22
       // We just respect this logic and allow these dates to be valid
       const rolloverCases = [
-        { input: "2024-02-30T10:30:00.000Z", expected: "2024-03-01T10:30:00.000Z" },
-        { input: "2024-04-31T10:30:00.000Z", expected: "2024-05-01T10:30:00.000Z" },
+        {
+          input: "2024-02-30T10:30:00.000Z",
+          expected: "2024-03-01T10:30:00.000Z",
+        },
+        {
+          input: "2024-04-31T10:30:00.000Z",
+          expected: "2024-05-01T10:30:00.000Z",
+        },
       ];
       rolloverCases.forEach(({ input, expected }) => {
         const date = new Date(input);

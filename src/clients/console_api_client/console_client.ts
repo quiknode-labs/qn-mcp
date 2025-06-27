@@ -2,10 +2,16 @@ import { Client, ClientOptions } from "../base_http_client/base_client";
 
 import type {
   CreateEndpointRequest,
+  CreateEndpointResponse,
+  GetChainsResponse,
   GetEndpointLogsQueryParams,
   GetEndpointLogsResponse,
+  GetEndpointResponse,
   GetEndpointsResponse,
   GetRpcEndpointSecurityOptionsResponse,
+  GetRpcUsageByChainResponse,
+  GetRpcUsageByEndpointResponse,
+  GetRpcUsageByMethodResponse,
   GetRpcUsageResponse,
   GetUsageQueryParams,
 } from "./types";
@@ -36,15 +42,15 @@ export class QuickNodeClient extends Client {
   }
 
   async getEndpoint(id: string) {
-    return this.get(`/v0/endpoints/${id}`);
+    return this.get<GetEndpointResponse>(`/v0/endpoints/${id}`);
   }
 
   async createEndpoint(body: CreateEndpointRequest) {
-    return this.post("/v0/endpoints", body);
+    return this.post<CreateEndpointResponse>("/v0/endpoints", body);
   }
 
   async getChains() {
-    return this.get("/v0/chains");
+    return this.get<GetChainsResponse>("/v0/chains");
   }
 
   async getRpcUsage(queryParams: GetUsageQueryParams) {
@@ -54,19 +60,22 @@ export class QuickNodeClient extends Client {
   }
 
   async getRpcUsageByEndpoint(queryParams: GetUsageQueryParams) {
-    return this.get("/v0/usage/rpc/by-endpoint", {
-      params: queryParams,
-    });
+    return this.get<GetRpcUsageByEndpointResponse>(
+      "/v0/usage/rpc/by-endpoint",
+      {
+        params: queryParams,
+      },
+    );
   }
 
   async getRpcUsageByMethod(queryParams: GetUsageQueryParams) {
-    return this.get("/v0/usage/rpc/by-method", {
+    return this.get<GetRpcUsageByMethodResponse>("/v0/usage/rpc/by-method", {
       params: queryParams,
     });
   }
 
   async getRpcUsageByChain(queryParams: GetUsageQueryParams) {
-    return this.get("/v0/usage/rpc/by-chain", {
+    return this.get<GetRpcUsageByChainResponse>("/v0/usage/rpc/by-chain", {
       params: queryParams,
     });
   }
