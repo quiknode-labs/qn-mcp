@@ -1,6 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { QuickNodeClient } from "../clients/console_api_client";
+import {
+  MetricsPeriod,
+  MetricsType,
+} from "../clients/console_api_client/types";
 import { genericArgs } from "../common/generic_args";
 import { isValidIsoString } from "../common/utils";
 
@@ -43,6 +47,27 @@ const createEndpointArgs = {
     .describe(
       "The specific network within the chain (e.g., 'mainnet', 'testnet')",
     ),
+};
+
+const endpointMetricArgs = {
+  ...genericArgs.endpointIdArgs,
+  period: z
+    .enum([
+      MetricsPeriod.HOUR,
+      MetricsPeriod.DAY,
+      MetricsPeriod.WEEK,
+      MetricsPeriod.MONTH,
+    ])
+    .describe("The time period for which the data is to be retrieved"),
+  metric: z
+    .enum([
+      MetricsType.METHOD_CALLS_OVER_TIME,
+      MetricsType.RESPONSE_STATUS_OVER_TIME,
+      MetricsType.METHOD_CALL_BREAKDOWN,
+      MetricsType.RESPONSE_STATUS_BREAKDOWN,
+      MetricsType.METHOD_RESPONSE_TIME_MAX,
+    ])
+    .describe("The type of metric to retrieve"),
 };
 
 export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
@@ -151,6 +176,30 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
           {
             type: "text",
             text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "get-endpoint-metrics",
+    {
+      description:
+        "Get metrics for a specific QuickNode endpoint. Supports various metrics like method calls, response status, and response times over different time periods",
+      inputSchema: { ...endpointMetricArgs },
+    },
+    async ({ endpoint_id, period, metric }) => {
+      const metrics = await client.getEndpointMetrics(endpoint_id, {
+        period,
+        metric,
+      });
+      return {
+        structuredContent: { data: metrics.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(metrics.data, null, 2),
           },
         ],
       };

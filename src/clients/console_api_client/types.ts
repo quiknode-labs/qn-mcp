@@ -290,3 +290,31 @@ export interface GetBillingPaymentsResponse
     payments: PaymentData[];
     error?: string;
   }> {}
+
+export enum MetricsPeriod {
+  HOUR = "hour",
+  DAY = "day",
+  WEEK = "week",
+  MONTH = "month",
+}
+
+export enum MetricsType {
+  METHOD_CALLS_OVER_TIME = "method_calls_over_time",
+  RESPONSE_STATUS_OVER_TIME = "response_status_over_time",
+  METHOD_CALL_BREAKDOWN = "method_call_breakdown",
+  RESPONSE_STATUS_BREAKDOWN = "response_status_breakdown",
+  METHOD_RESPONSE_TIME_MAX = "method_response_time_max",
+}
+
+export interface EndpointMetricsQueryParams extends QueryParams {
+  period: MetricsPeriod;
+  metric: MetricsType;
+}
+
+export interface GetEndpointMetricsResponse
+  extends BaseResponse<
+    {
+      data: number[][];
+      tag: string;
+    }[]
+  > {}

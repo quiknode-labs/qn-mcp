@@ -4,11 +4,13 @@ import type {
   CreateEndpointRequest,
   CreateEndpointResponse,
   DeleteEndpointResponse,
+  EndpointMetricsQueryParams,
   GetBillingInvoicesResponse,
   GetBillingPaymentsResponse,
   GetChainsResponse,
   GetEndpointLogsQueryParams,
   GetEndpointLogsResponse,
+  GetEndpointMetricsResponse,
   GetEndpointResponse,
   GetEndpointsResponse,
   GetRpcEndpointSecurityOptionsResponse,
@@ -108,6 +110,18 @@ export class QuickNodeClient extends Client {
 
   async getBillingPayments() {
     return this.get<GetBillingPaymentsResponse>("/v0/billing/payments");
+  }
+
+  async getEndpointMetrics(
+    endpointId: string,
+    queryParams: EndpointMetricsQueryParams,
+  ) {
+    return this.get<GetEndpointMetricsResponse>(
+      `/v0/endpoints/${endpointId}/metrics`,
+      {
+        params: queryParams,
+      },
+    );
   }
 }
 
