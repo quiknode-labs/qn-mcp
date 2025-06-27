@@ -251,6 +251,18 @@ export interface GetEndpointLogsResponse
   next_at: string;
 }
 
+export interface GetEndpointLogDetailsQueryParams extends QueryParams {
+  request_id: string;
+}
+
+export interface EndpointLogDetailsData extends Record<string, unknown> {
+  request: string;
+  response: string;
+}
+
+export interface GetEndpointLogDetailsResponse
+  extends BaseResponse<EndpointLogDetailsData> {}
+
 // Billing response types
 export interface InvoiceLineData extends Record<string, unknown> {
   description: string;

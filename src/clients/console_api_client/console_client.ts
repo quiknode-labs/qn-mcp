@@ -27,6 +27,8 @@ import type {
   GetBillingInvoicesResponse,
   GetBillingPaymentsResponse,
   GetChainsResponse,
+  GetEndpointLogDetailsQueryParams,
+  GetEndpointLogDetailsResponse,
   GetEndpointLogsQueryParams,
   GetEndpointLogsResponse,
   GetEndpointMetricsResponse,
@@ -124,6 +126,15 @@ export class QuickNodeClient extends Client {
   async getEndpointLogs(queryParams: GetEndpointLogsQueryParams) {
     return this.get<GetEndpointLogsResponse>(
       `/v0/endpoints/${queryParams.endpoint_id}/logs`,
+      {
+        params: queryParams,
+      },
+    );
+  }
+
+  async getEndpointLogDetails(queryParams: GetEndpointLogDetailsQueryParams) {
+    return this.get<GetEndpointLogDetailsResponse>(
+      `/v0/endpoints/${queryParams.endpoint_id}/log_details`,
       {
         params: queryParams,
       },

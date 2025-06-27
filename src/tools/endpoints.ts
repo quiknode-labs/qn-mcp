@@ -244,6 +244,13 @@ const deleteTokenArgs = {
   token_id: z.string().describe("The unique identifier of the token to delete"),
 };
 
+const getLogDetailsArgs = {
+  ...genericArgs.endpointIdArgs,
+  request_id: z
+    .string()
+    .describe("The UUID of the log entry to get detailed information for"),
+};
+
 export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoints",
@@ -310,6 +317,30 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
           },
         ],
         nextCursor: logs.next_at,
+      };
+    },
+  );
+
+  server.registerTool(
+    "get-endpoint-log-details",
+    {
+      description:
+        "Get detailed request and response information for a specific log entry. This provides the raw request payload and full response that were logged for a particular request",
+      inputSchema: { ...getLogDetailsArgs },
+    },
+    async ({ endpoint_id, request_id }) => {
+      const logDetails = await client.getEndpointLogDetails({
+        endpoint_id,
+        request_id,
+      });
+      return {
+        structuredContent: { data: logDetails.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(logDetails.data, null, 2),
+          },
+        ],
       };
     },
   );
