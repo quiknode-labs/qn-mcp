@@ -5,7 +5,7 @@
   "author": "QuickNode <devex@quicknode.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quiknode-labs/qn-mcp.git"
+    "url": "git+https://github.com/quiknode-labs/qn-mcp.git"
   },
   "homepage": "https://github.com/quiknode-labs/qn-mcp#readme",
   "bugs": {
