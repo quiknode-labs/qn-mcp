@@ -167,6 +167,83 @@ const updateSecurityOptionsArgs = {
     ),
 };
 
+// Security management argument schemas
+const createDomainMaskArgs = {
+  ...genericArgs.endpointIdArgs,
+  domain_mask: z
+    .string()
+    .describe("The domain mask that you will use to mask your endpoint"),
+};
+
+const deleteDomainMaskArgs = {
+  ...genericArgs.endpointIdArgs,
+  domain_mask_id: z
+    .string()
+    .describe("The unique identifier of the domain mask to delete"),
+};
+
+const createIpArgs = {
+  ...genericArgs.endpointIdArgs,
+  ip: z
+    .string()
+    .describe(
+      "The specific IP address that is allowed to access the API endpoint",
+    ),
+};
+
+const deleteIpArgs = {
+  ...genericArgs.endpointIdArgs,
+  ip_id: z.string().describe("The unique identifier of the IP rule to delete"),
+};
+
+const createJwtArgs = {
+  ...genericArgs.endpointIdArgs,
+  public_key: z
+    .string()
+    .describe("The public key used to verify the JWT token"),
+  kid: z
+    .string()
+    .describe("The key identifier (KID) associated with the public key"),
+  name: z.string().describe("A human-readable name for the JWT configuration"),
+};
+
+const deleteJwtArgs = {
+  ...genericArgs.endpointIdArgs,
+  jwt_id: z
+    .string()
+    .describe("The unique identifier of the JWT configuration to delete"),
+};
+
+const createReferrerArgs = {
+  ...genericArgs.endpointIdArgs,
+  referrer: z
+    .string()
+    .describe(
+      "The URL or domain that is allowed to access the specific API endpoint",
+    ),
+};
+
+const deleteReferrerArgs = {
+  ...genericArgs.endpointIdArgs,
+  referrer_id: z
+    .string()
+    .describe("The unique identifier of the referrer rule to delete"),
+};
+
+const createTokenArgs = {
+  ...genericArgs.endpointIdArgs,
+  token: z
+    .string()
+    .describe(
+      "The authentication token that is allowed to access the API endpoint",
+    ),
+};
+
+const deleteTokenArgs = {
+  ...genericArgs.endpointIdArgs,
+  token_id: z.string().describe("The unique identifier of the token to delete"),
+};
+
 export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoints",
@@ -483,6 +560,237 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
           {
             type: "text",
             text: JSON.stringify(securityOptions.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "create-endpoint-security-domain-mask",
+    {
+      description: "Create a domain mask for a QuickNode endpoint",
+      inputSchema: { ...createDomainMaskArgs },
+    },
+    async ({ endpoint_id, domain_mask }) => {
+      const domainMask = await client.createEndpointSecurityDomainMask(
+        endpoint_id,
+        {
+          domain_mask,
+        },
+      );
+      return {
+        structuredContent: { data: domainMask.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(domainMask.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "delete-endpoint-security-domain-mask",
+    {
+      description:
+        "Delete a domain mask from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...deleteDomainMaskArgs },
+    },
+    async ({ endpoint_id, domain_mask_id }) => {
+      const result = await client.deleteEndpointSecurityDomainMask(
+        endpoint_id,
+        domain_mask_id,
+      );
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "create-endpoint-security-ip",
+    {
+      description: "Create an IP restriction for a QuickNode endpoint",
+      inputSchema: { ...createIpArgs },
+    },
+    async ({ endpoint_id, ip }) => {
+      const ipRule = await client.createEndpointSecurityIp(endpoint_id, { ip });
+      return {
+        structuredContent: { data: ipRule.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(ipRule.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "delete-endpoint-security-ip",
+    {
+      description:
+        "Delete an IP restriction from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...deleteIpArgs },
+    },
+    async ({ endpoint_id, ip_id }) => {
+      const result = await client.deleteEndpointSecurityIp(endpoint_id, ip_id);
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "create-endpoint-security-jwt",
+    {
+      description: "Create a JWT configuration for a QuickNode endpoint",
+      inputSchema: { ...createJwtArgs },
+    },
+    async ({ endpoint_id, public_key, kid, name }) => {
+      const jwt = await client.createEndpointSecurityJwt(endpoint_id, {
+        public_key,
+        kid,
+        name,
+      });
+      return {
+        structuredContent: { data: jwt.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(jwt.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "delete-endpoint-security-jwt",
+    {
+      description:
+        "Delete a JWT configuration from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...deleteJwtArgs },
+    },
+    async ({ endpoint_id, jwt_id }) => {
+      const result = await client.deleteEndpointSecurityJwt(
+        endpoint_id,
+        jwt_id,
+      );
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "create-endpoint-security-referrer",
+    {
+      description: "Create a referrer restriction for a QuickNode endpoint",
+      inputSchema: { ...createReferrerArgs },
+    },
+    async ({ endpoint_id, referrer }) => {
+      const referrerRule = await client.createEndpointSecurityReferrer(
+        endpoint_id,
+        { referrer },
+      );
+      return {
+        structuredContent: { data: referrerRule.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(referrerRule.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "delete-endpoint-security-referrer",
+    {
+      description:
+        "Delete a referrer restriction from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...deleteReferrerArgs },
+    },
+    async ({ endpoint_id, referrer_id }) => {
+      const result = await client.deleteEndpointSecurityReferrer(
+        endpoint_id,
+        referrer_id,
+      );
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "create-endpoint-security-token",
+    {
+      description: "Create an authentication token for a QuickNode endpoint",
+      inputSchema: { ...createTokenArgs },
+    },
+    async ({ endpoint_id, token }) => {
+      const authToken = await client.createEndpointSecurityToken(endpoint_id, {
+        token,
+      });
+      return {
+        structuredContent: { data: authToken.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(authToken.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "delete-endpoint-security-token",
+    {
+      description:
+        "Delete an authentication token from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...deleteTokenArgs },
+    },
+    async ({ endpoint_id, token_id }) => {
+      const result = await client.deleteEndpointSecurityToken(
+        endpoint_id,
+        token_id,
+      );
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
           },
         ],
       };

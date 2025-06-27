@@ -3,11 +3,27 @@ import { Client, ClientOptions } from "../base_http_client/base_client";
 import type {
   CreateEndpointRequest,
   CreateEndpointResponse,
+  CreateEndpointSecurityDomainMaskRequest,
+  CreateEndpointSecurityDomainMaskResponse,
+  CreateEndpointSecurityIpRequest,
+  CreateEndpointSecurityIpResponse,
+  CreateEndpointSecurityJwtRequest,
+  CreateEndpointSecurityJwtResponse,
+  CreateEndpointSecurityReferrerRequest,
+  CreateEndpointSecurityReferrerResponse,
+  CreateEndpointSecurityTokenRequest,
+  CreateEndpointSecurityTokenResponse,
   CreateMethodRateLimitRequest,
   CreateMethodRateLimitResponse,
   DeleteEndpointResponse,
+  DeleteEndpointSecurityDomainMaskResponse,
+  DeleteEndpointSecurityIpResponse,
+  DeleteEndpointSecurityJwtResponse,
+  DeleteEndpointSecurityReferrerResponse,
+  DeleteEndpointSecurityTokenResponse,
   DeleteMethodRateLimitResponse,
   EndpointMetricsQueryParams,
+  EndpointSecurityOptionsRequest,
   GetBillingInvoicesResponse,
   GetBillingPaymentsResponse,
   GetChainsResponse,
@@ -15,6 +31,7 @@ import type {
   GetEndpointLogsResponse,
   GetEndpointMetricsResponse,
   GetEndpointResponse,
+  GetEndpointSecurityOptionsResponse,
   GetEndpointsResponse,
   GetMethodRateLimitsResponse,
   GetRpcEndpointSecurityOptionsResponse,
@@ -22,14 +39,12 @@ import type {
   GetRpcUsageByEndpointResponse,
   GetRpcUsageByMethodResponse,
   GetRpcUsageResponse,
-  GetSecurityOptionsResponse,
   GetUsageQueryParams,
-  SecurityOptionsRequest,
+  UpdateEndpointSecurityOptionsResponse,
   UpdateMethodRateLimitRequest,
   UpdateMethodRateLimitResponse,
   UpdateRateLimitsRequest,
   UpdateRateLimitsResponse,
-  UpdateSecurityOptionsResponse,
 } from "./types";
 
 export class QuickNodeClient extends Client {
@@ -176,18 +191,101 @@ export class QuickNodeClient extends Client {
   }
 
   async getSecurityOptions(endpointId: string) {
-    return this.get<GetSecurityOptionsResponse>(
+    return this.get<GetEndpointSecurityOptionsResponse>(
       `/v0/endpoints/${endpointId}/security_options`,
     );
   }
 
   async updateSecurityOptions(
     endpointId: string,
-    body: SecurityOptionsRequest,
+    body: EndpointSecurityOptionsRequest,
   ) {
-    return this.patch<UpdateSecurityOptionsResponse>(
+    return this.patch<UpdateEndpointSecurityOptionsResponse>(
       `/v0/endpoints/${endpointId}/security_options`,
       body,
+    );
+  }
+
+  async createEndpointSecurityDomainMask(
+    endpointId: string,
+    body: CreateEndpointSecurityDomainMaskRequest,
+  ) {
+    return this.post<CreateEndpointSecurityDomainMaskResponse>(
+      `/v0/endpoints/${endpointId}/security/domain_masks`,
+      body,
+    );
+  }
+
+  async deleteEndpointSecurityDomainMask(
+    endpointId: string,
+    domainMaskId: string,
+  ) {
+    return this.delete<DeleteEndpointSecurityDomainMaskResponse>(
+      `/v0/endpoints/${endpointId}/security/domain_masks/${domainMaskId}`,
+    );
+  }
+
+  async createEndpointSecurityIp(
+    endpointId: string,
+    body: CreateEndpointSecurityIpRequest,
+  ) {
+    return this.post<CreateEndpointSecurityIpResponse>(
+      `/v0/endpoints/${endpointId}/security/ips`,
+      body,
+    );
+  }
+
+  async deleteEndpointSecurityIp(endpointId: string, ipId: string) {
+    return this.delete<DeleteEndpointSecurityIpResponse>(
+      `/v0/endpoints/${endpointId}/security/ips/${ipId}`,
+    );
+  }
+
+  async createEndpointSecurityJwt(
+    endpointId: string,
+    body: CreateEndpointSecurityJwtRequest,
+  ) {
+    return this.post<CreateEndpointSecurityJwtResponse>(
+      `/v0/endpoints/${endpointId}/security/jwts`,
+      body,
+    );
+  }
+
+  async deleteEndpointSecurityJwt(endpointId: string, jwtId: string) {
+    return this.delete<DeleteEndpointSecurityJwtResponse>(
+      `/v0/endpoints/${endpointId}/security/jwts/${jwtId}`,
+    );
+  }
+
+  async createEndpointSecurityReferrer(
+    endpointId: string,
+    body: CreateEndpointSecurityReferrerRequest,
+  ) {
+    return this.post<CreateEndpointSecurityReferrerResponse>(
+      `/v0/endpoints/${endpointId}/security/referrers`,
+      body,
+    );
+  }
+
+  async deleteEndpointSecurityReferrer(endpointId: string, referrerId: string) {
+    return this.delete<DeleteEndpointSecurityReferrerResponse>(
+      `/v0/endpoints/${endpointId}/security/referrers/${referrerId}`,
+    );
+  }
+
+  async createEndpointSecurityToken(
+    endpointId: string,
+    body: CreateEndpointSecurityTokenRequest,
+  ) {
+    return this.post<CreateEndpointSecurityTokenResponse>(
+      `/v0/endpoints/${endpointId}/security/tokens`,
+      body,
+    );
+  }
+
+  async deleteEndpointSecurityToken(endpointId: string, tokenId: string) {
+    return this.delete<DeleteEndpointSecurityTokenResponse>(
+      `/v0/endpoints/${endpointId}/security/tokens/${tokenId}`,
     );
   }
 }

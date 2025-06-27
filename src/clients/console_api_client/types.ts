@@ -384,10 +384,10 @@ export interface DeleteMethodRateLimitResponse
     result: boolean;
   }> {}
 
-export interface GetSecurityOptionsResponse
+export interface GetEndpointSecurityOptionsResponse
   extends BaseResponse<SecurityOptionData[]> {}
 
-export interface SecurityOptionsRequest {
+export interface EndpointSecurityOptionsRequest {
   options: {
     tokens?: "enabled" | "disabled";
     referrers?: "enabled" | "disabled";
@@ -399,5 +399,84 @@ export interface SecurityOptionsRequest {
   };
 }
 
-export interface UpdateSecurityOptionsResponse
+export interface UpdateEndpointSecurityOptionsResponse
   extends BaseResponse<SecurityOptionData[]> {}
+
+export interface CreateEndpointSecurityDomainMaskRequest {
+  domain_mask: string;
+}
+
+export interface CreateEndpointSecurityDomainMaskResponse
+  extends BaseResponse<{
+    id: string;
+    domain_mask: string;
+  }> {}
+
+export interface DeleteEndpointSecurityDomainMaskResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}
+
+export interface CreateEndpointSecurityIpRequest {
+  ip: string;
+}
+
+export interface CreateEndpointSecurityIpResponse
+  extends BaseResponse<{
+    id: string;
+    ip: string;
+  }> {}
+
+export interface DeleteEndpointSecurityIpResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}
+
+export interface CreateEndpointSecurityJwtRequest {
+  public_key: string;
+  kid: string;
+  name: string;
+}
+
+export interface CreateEndpointSecurityJwtResponse
+  extends BaseResponse<{
+    id: string;
+    public_key: string;
+    kid: string;
+    name: string;
+  }> {}
+
+export interface DeleteEndpointSecurityJwtResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}
+
+export interface CreateEndpointSecurityReferrerRequest {
+  referrer: string;
+}
+
+export interface CreateEndpointSecurityReferrerResponse
+  extends BaseResponse<{
+    id: string;
+    referrer: string;
+  }> {}
+
+export interface DeleteEndpointSecurityReferrerResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}
+
+export interface CreateEndpointSecurityTokenRequest {
+  token: string;
+}
+
+export interface CreateEndpointSecurityTokenResponse
+  extends BaseResponse<{
+    id: string;
+    token: string;
+  }> {}
+
+export interface DeleteEndpointSecurityTokenResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}
