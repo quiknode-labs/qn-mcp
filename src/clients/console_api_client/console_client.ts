@@ -3,6 +3,7 @@ import { Client, ClientOptions } from "../base_http_client/base_client";
 import type {
   CreateEndpointRequest,
   CreateEndpointResponse,
+  DeleteEndpointResponse,
   GetChainsResponse,
   GetEndpointLogsQueryParams,
   GetEndpointLogsResponse,
@@ -47,6 +48,10 @@ export class QuickNodeClient extends Client {
 
   async createEndpoint(body: CreateEndpointRequest) {
     return this.post<CreateEndpointResponse>("/v0/endpoints", body);
+  }
+
+  async deleteEndpoint(id: string) {
+    return this.delete<DeleteEndpointResponse>(`/v0/endpoints/${id}`);
   }
 
   async getChains() {

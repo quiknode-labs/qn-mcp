@@ -125,6 +125,11 @@ export interface GetEndpointResponse extends BaseResponse<EndpointData> {}
 
 export interface CreateEndpointResponse extends BaseResponse<EndpointData> {}
 
+export interface DeleteEndpointResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}
+
 export interface ChainData extends Record<string, unknown> {
   slug: string;
   networks: {

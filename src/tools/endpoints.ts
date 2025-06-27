@@ -135,4 +135,25 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
       };
     },
   );
+
+  server.registerTool(
+    "delete-endpoint",
+    {
+      description:
+        "Archive a QuickNode endpoint by its ID. This will archive the endpoint and make it inactive. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...genericArgs.endpointIdArgs },
+    },
+    async ({ endpoint_id }) => {
+      const result = await client.deleteEndpoint(endpoint_id);
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
 }
