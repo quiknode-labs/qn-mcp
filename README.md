@@ -11,7 +11,7 @@ Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or 
   "mcpServers": {
     "quicknode-mcp": {
       "command": "npx",
-      "args": ["-y", "quiknode-labs/mc3po"],
+      "args": ["-y", "quiknode-labs/qn-mcp"],
       "env": {
         "QUICKNODE_API_KEY": "<qn-token>"
       }
@@ -32,16 +32,13 @@ To run from local repo, put this server config on your `claude_desktop_config.js
 {
   "mcpServers": {
     "quicknode-mcp": {
-      "command": "<absolute-path-to-repo>/mc3po/dist/index.js",
+      "command": "<absolute-path-to-repo>/qn-mcp/dist/index.js",
       "env": {
-        "QUICKNODE_API_KEY": "<qn-token>",
-        "QUICKNODE_API_URL": "https://api.quicknode.dev"
+        "QUICKNODE_API_KEY": "<qn-token>"
       }
     }
   }
 }
 ```
-
-can skip `QUICKNODE_API_URL` and it'll default to api.quicknode.com.
 
 Then restart Claude/reload Cursor config or alike, you should see resources/tools get picked up by the chat client.

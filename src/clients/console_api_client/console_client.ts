@@ -11,7 +11,11 @@ import type {
 
 export class QuickNodeClient extends Client {
   constructor(options: ClientOptions) {
-    super(options);
+    super({
+      ...options, headers: {
+        ...options.headers,
+        "x-qn-sdk": "qn-mcp"
+    }});
   }
 
   async listEndpoints(limit: number = 10, offset: number = 0) {

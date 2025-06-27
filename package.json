@@ -1,12 +1,12 @@
 {
-  "name": "mc3po",
+  "name": "qn-mcp",
   "version": "1.0.0",
   "description": "MCP Server for interacting with QuickNode, leading Web3 infrastructure provider",
   "files": [
     "dist"
   ],
   "bin": {
-    "mc3po": "dist/index.js"
+    "qn-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
@@ -16,16 +16,16 @@
     "format-test": "prettier --check ."
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.11.0",
+    "@modelcontextprotocol/sdk": "1.13.2",
     "express": "^5.1.0",
-    "zod": "^3.23.8",
-    "zod-to-json-schema": "^3.24.1"
+    "zod": "^3.25.67",
+    "zod-to-json-schema": "^3.24.6"
   },
   "devDependencies": {
-    "@types/node": "^22",
-    "prettier": "^3.5.3",
-    "shx": "^0.3.4",
-    "typescript": "^5.3.3"
+    "@types/node": "^22.15.33",
+    "prettier": "^3.6.2",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.3"
   },
   "keywords": [],
   "author": "",
