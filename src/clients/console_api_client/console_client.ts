@@ -3,7 +3,10 @@ import { Client, ClientOptions } from "../base_http_client/base_client";
 import type {
   CreateEndpointRequest,
   CreateEndpointResponse,
+  CreateMethodRateLimitRequest,
+  CreateMethodRateLimitResponse,
   DeleteEndpointResponse,
+  DeleteMethodRateLimitResponse,
   EndpointMetricsQueryParams,
   GetBillingInvoicesResponse,
   GetBillingPaymentsResponse,
@@ -13,12 +16,17 @@ import type {
   GetEndpointMetricsResponse,
   GetEndpointResponse,
   GetEndpointsResponse,
+  GetMethodRateLimitsResponse,
   GetRpcEndpointSecurityOptionsResponse,
   GetRpcUsageByChainResponse,
   GetRpcUsageByEndpointResponse,
   GetRpcUsageByMethodResponse,
   GetRpcUsageResponse,
   GetUsageQueryParams,
+  UpdateMethodRateLimitRequest,
+  UpdateMethodRateLimitResponse,
+  UpdateRateLimitsRequest,
+  UpdateRateLimitsResponse,
 } from "./types";
 
 export class QuickNodeClient extends Client {
@@ -121,6 +129,46 @@ export class QuickNodeClient extends Client {
       {
         params: queryParams,
       },
+    );
+  }
+
+  async updateRateLimits(endpointId: string, body: UpdateRateLimitsRequest) {
+    return this.put<UpdateRateLimitsResponse>(
+      `/v0/endpoints/${endpointId}/rate-limits`,
+      body,
+    );
+  }
+
+  async getMethodRateLimits(endpointId: string) {
+    return this.get<GetMethodRateLimitsResponse>(
+      `/v0/endpoints/${endpointId}/method-rate-limits`,
+    );
+  }
+
+  async createMethodRateLimit(
+    endpointId: string,
+    body: CreateMethodRateLimitRequest,
+  ) {
+    return this.post<CreateMethodRateLimitResponse>(
+      `/v0/endpoints/${endpointId}/method-rate-limits`,
+      body,
+    );
+  }
+
+  async updateMethodRateLimit(
+    endpointId: string,
+    methodRateLimitId: string,
+    body: UpdateMethodRateLimitRequest,
+  ) {
+    return this.patch<UpdateMethodRateLimitResponse>(
+      `/v0/endpoints/${endpointId}/method-rate-limits/${methodRateLimitId}`,
+      body,
+    );
+  }
+
+  async deleteMethodRateLimit(endpointId: string, methodRateLimitId: string) {
+    return this.delete<DeleteMethodRateLimitResponse>(
+      `/v0/endpoints/${endpointId}/method-rate-limits/${methodRateLimitId}`,
     );
   }
 }

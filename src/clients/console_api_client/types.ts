@@ -318,3 +318,68 @@ export interface GetEndpointMetricsResponse
       tag: string;
     }[]
   > {}
+
+export enum RateLimitInterval {
+  SECOND = "second",
+  MINUTE = "minute",
+  HOUR = "hour",
+}
+
+export enum RateLimitStatus {
+  ENABLED = "enabled",
+  DISABLED = "disabled",
+}
+
+export interface MethodRateLimiterData extends Record<string, unknown> {
+  id: string;
+  interval: string;
+  methods: string[];
+  rate: number;
+  status: string;
+  created: string;
+}
+
+export interface GetMethodRateLimitsResponse
+  extends BaseResponse<{
+    rate_limiters: MethodRateLimiterData[];
+  }> {}
+
+export interface UpdateRateLimitsRequest {
+  rate_limits: {
+    rps?: number;
+    rpd?: number;
+    rpm?: number;
+  };
+}
+
+export interface UpdateRateLimitsResponse
+  extends BaseResponse<{
+    limits: {
+      rps: number;
+      rpd: number;
+      rpm: number;
+    };
+  }> {}
+
+export interface CreateMethodRateLimitRequest {
+  interval: RateLimitInterval;
+  methods: string[];
+  rate: number;
+}
+
+export interface CreateMethodRateLimitResponse
+  extends BaseResponse<MethodRateLimiterData> {}
+
+export interface UpdateMethodRateLimitRequest {
+  status: RateLimitStatus;
+  methods: string[];
+  rate: number;
+}
+
+export interface UpdateMethodRateLimitResponse
+  extends BaseResponse<MethodRateLimiterData> {}
+
+export interface DeleteMethodRateLimitResponse
+  extends BaseResponse<{
+    result: boolean;
+  }> {}

@@ -4,6 +4,8 @@ import { QuickNodeClient } from "../clients/console_api_client";
 import {
   MetricsPeriod,
   MetricsType,
+  RateLimitInterval,
+  RateLimitStatus,
 } from "../clients/console_api_client/types";
 import { genericArgs } from "../common/generic_args";
 import { isValidIsoString } from "../common/utils";
@@ -68,6 +70,63 @@ const endpointMetricArgs = {
       MetricsType.METHOD_RESPONSE_TIME_MAX,
     ])
     .describe("The type of metric to retrieve"),
+};
+
+const updateRateLimitsArgs = {
+  ...genericArgs.endpointIdArgs,
+  rps: z.number().min(1).optional().describe("Maximum requests per second"),
+  rpm: z.number().min(1).optional().describe("Maximum requests per minute"),
+  rpd: z.number().min(1).optional().describe("Maximum requests per day"),
+};
+
+const createMethodRateLimitArgs = {
+  ...genericArgs.endpointIdArgs,
+  interval: z
+    .enum([
+      RateLimitInterval.SECOND,
+      RateLimitInterval.MINUTE,
+      RateLimitInterval.HOUR,
+    ])
+    .describe("The time interval for the rate limit"),
+  methods: z
+    .array(z.string())
+    .min(1)
+    .describe("Array of method names to apply the rate limit to"),
+  rate: z
+    .number()
+    .min(1)
+    .describe(
+      "Maximum number of requests allowed within the specified interval",
+    ),
+};
+
+const updateMethodRateLimitArgs = {
+  ...genericArgs.endpointIdArgs,
+  method_rate_limit_id: z
+    .string()
+    .describe("The unique identifier for the rate limiter"),
+  status: z
+    .enum([RateLimitStatus.ENABLED, RateLimitStatus.DISABLED])
+    .describe("If the rate limiter should be enabled or disabled"),
+  methods: z
+    .array(z.string())
+    .min(1)
+    .describe("Array of method names to apply the rate limit to"),
+  rate: z
+    .number()
+    .min(1)
+    .describe(
+      "Maximum number of requests allowed within the specified interval",
+    ),
+};
+
+const deleteMethodRateLimitArgs = {
+  ...genericArgs.endpointIdArgs,
+  method_rate_limit_id: z
+    .string()
+    .describe(
+      "The unique identifier of the rate limiter to delete. This can be found in the output of the get-endpoint-method-rate-limits tool",
+    ),
 };
 
 export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
@@ -200,6 +259,132 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
           {
             type: "text",
             text: JSON.stringify(metrics.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "update-endpoint-rate-limits",
+    {
+      description:
+        "Update the general rate limits (RPS, RPM, RPD) for a QuickNode endpoint",
+      inputSchema: { ...updateRateLimitsArgs },
+    },
+    async ({ endpoint_id, rps, rpm, rpd }) => {
+      const rateLimits = await client.updateRateLimits(endpoint_id, {
+        rate_limits: {
+          ...(rps !== undefined && { rps }),
+          ...(rpm !== undefined && { rpm }),
+          ...(rpd !== undefined && { rpd }),
+        },
+      });
+      return {
+        structuredContent: { data: rateLimits.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(rateLimits.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "get-endpoint-method-rate-limits",
+    {
+      description:
+        "Get all method rate limits for a specific QuickNode endpoint",
+      inputSchema: { ...genericArgs.endpointIdArgs },
+    },
+    async ({ endpoint_id }) => {
+      const rateLimits = await client.getMethodRateLimits(endpoint_id);
+      return {
+        structuredContent: { data: rateLimits.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(rateLimits.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "create-endpoint-method-rate-limit",
+    {
+      description:
+        "Create a new method-specific rate limiter for a QuickNode endpoint",
+      inputSchema: { ...createMethodRateLimitArgs },
+    },
+    async ({ endpoint_id, interval, methods, rate }) => {
+      const rateLimit = await client.createMethodRateLimit(endpoint_id, {
+        interval,
+        methods,
+        rate,
+      });
+      return {
+        structuredContent: { data: rateLimit.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(rateLimit.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "update-endpoint-method-rate-limit",
+    {
+      description:
+        "Update an existing method-specific rate limit for a QuickNode endpoint",
+      inputSchema: { ...updateMethodRateLimitArgs },
+    },
+    async ({ endpoint_id, method_rate_limit_id, status, methods, rate }) => {
+      const rateLimit = await client.updateMethodRateLimit(
+        endpoint_id,
+        method_rate_limit_id,
+        {
+          status,
+          methods,
+          rate,
+        },
+      );
+      return {
+        structuredContent: { data: rateLimit.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(rateLimit.data, null, 2),
+          },
+        ],
+      };
+    },
+  );
+
+  server.registerTool(
+    "delete-endpoint-method-rate-limit",
+    {
+      description:
+        "Delete a method-specific rate limit from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
+      inputSchema: { ...deleteMethodRateLimitArgs },
+    },
+    async ({ endpoint_id, method_rate_limit_id }) => {
+      const result = await client.deleteMethodRateLimit(
+        endpoint_id,
+        method_rate_limit_id,
+      );
+      return {
+        structuredContent: { data: result.data },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result.data, null, 2),
           },
         ],
       };
