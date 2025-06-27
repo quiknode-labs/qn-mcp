@@ -250,3 +250,43 @@ export interface GetEndpointLogsResponse
   extends BaseResponse<EndpointLogData[]> {
   next_at: string;
 }
+
+// Billing response types
+export interface InvoiceLineData extends Record<string, unknown> {
+  description: string;
+  amount: number;
+}
+
+export interface InvoiceData extends Record<string, unknown> {
+  id: string;
+  status: string;
+  billing_reason: string;
+  amount_due: number;
+  amount_paid: number;
+  subtotal: number;
+  lines: InvoiceLineData[];
+  period_end: number;
+  period_start: number;
+  created: number;
+}
+
+export interface PaymentData extends Record<string, unknown> {
+  amount: string;
+  card_last_4: string;
+  status: string;
+  created_at: string;
+  currency: string;
+  marketplace_amount: string;
+}
+
+export interface GetBillingInvoicesResponse
+  extends BaseResponse<{
+    invoices: InvoiceData[];
+    error?: string;
+  }> {}
+
+export interface GetBillingPaymentsResponse
+  extends BaseResponse<{
+    payments: PaymentData[];
+    error?: string;
+  }> {}

@@ -4,6 +4,8 @@ import type {
   CreateEndpointRequest,
   CreateEndpointResponse,
   DeleteEndpointResponse,
+  GetBillingInvoicesResponse,
+  GetBillingPaymentsResponse,
   GetChainsResponse,
   GetEndpointLogsQueryParams,
   GetEndpointLogsResponse,
@@ -98,6 +100,14 @@ export class QuickNodeClient extends Client {
         params: queryParams,
       },
     );
+  }
+
+  async getBillingInvoices() {
+    return this.get<GetBillingInvoicesResponse>("/v0/billing/invoices");
+  }
+
+  async getBillingPayments() {
+    return this.get<GetBillingPaymentsResponse>("/v0/billing/payments");
   }
 }
 
