@@ -2,8 +2,20 @@
   "name": "@quicknode/mcp",
   "version": "0.0.1",
   "description": "MCP Server for building web3 infrastructure with QuickNode, leading Web3 infrastructure provider",
+  "author": "QuickNode <devex@quicknode.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quiknode-labs/qn-mcp.git"
+  },
+  "homepage": "https://github.com/quiknode-labs/qn-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/quiknode-labs/qn-mcp/issues"
+  },
   "bin": {
     "qn-mcp": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   },
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
@@ -50,6 +62,5 @@
     "cursor",
     "assistant"
   ],
-  "author": "",
   "license": "ISC"
 }
