@@ -10,6 +10,20 @@ import {
 import { genericArgs } from "../common/generic_args";
 import { isValidIsoString } from "../common/utils";
 
+const listEndpointsArgs = {
+  limit: z
+    .number()
+    .min(1)
+    .max(250)
+    .default(50)
+    .describe("Number of endpoints to retrieve (1-250, default: 50)"),
+  offset: z
+    .number()
+    .min(0)
+    .default(0)
+    .describe("Number of endpoints to skip for pagination (default: 0)"),
+};
+
 const endpointLogsArgs = {
   ...genericArgs.endpointIdArgs,
   from: z
@@ -256,10 +270,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
     "get-endpoints",
     {
       description:
-        "Get all web3 QuickNode endpoints for the user, this is a list of all the endpoints that the user has created across all chains and networks",
+        "Get web3 QuickNode endpoints for the user, this is a list of all the endpoints that the user has created across all chains and networks. Supports pagination via limit and offset parameters",
+      inputSchema: { ...listEndpointsArgs },
     },
-    async () => {
-      const endpoints = await client.listEndpoints();
+    async ({ limit, offset }) => {
+      const endpoints = await client.listEndpoints(limit, offset);
       return {
         structuredContent: { data: endpoints },
         content: [

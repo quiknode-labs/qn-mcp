@@ -1,4 +1,4 @@
-# ![QuickNode Logo](https://www.quicknode.com/compiled-assets/qn-logo-q.svg)uickNode MCP Server
+# QuickNode MCP Server
 
 > **🚀 The official Model Context Protocol (MCP) server for QuickNode**
 >
