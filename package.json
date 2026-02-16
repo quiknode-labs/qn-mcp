@@ -1,8 +1,8 @@
 {
   "name": "@quicknode/mcp",
   "version": "0.1.0",
-  "description": "MCP Server for building web3 infrastructure with QuickNode, leading Web3 infrastructure provider",
-  "author": "QuickNode <devex@quicknode.com>",
+  "description": "MCP Server for building web3 infrastructure with Quicknode, leading Web3 infrastructure provider",
+  "author": "Quicknode <devex@quicknode.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/quiknode-labs/qn-mcp.git"
