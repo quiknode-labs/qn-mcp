@@ -1,21 +1,21 @@
-# QuickNode MCP Server
+# Quicknode MCP Server
 
-> **🚀 The official Model Context Protocol (MCP) server for QuickNode**
+> **🚀 The official Model Context Protocol (MCP) server for Quicknode**
 >
 > Unleash the power of blockchain infrastructure from your AI workflows
 
 ---
 
-## 🌟 What is QuickNode MCP?
+## 🌟 What is Quicknode MCP?
 
-QuickNode MCP Server brings the power of QuickNode's blockchain infrastructure directly to your AI assistant. With this MCP server, you can:
+Quicknode MCP Server brings the power of Quicknode's blockchain infrastructure directly to your AI assistant. With this MCP server, you can:
 
-- **🔧 Set up and configure** QuickNode endpoints and infra across multiple networks
+- **🔧 Set up and configure** Quicknode endpoints and infra across multiple networks
 - **📊 Monitor endpoint usage** and billing information
-- **⚡ Manage your QuickNode infrastructure** through natural language
+- **⚡ Manage your Quicknode infrastructure** through natural language
 - **🛠️ Unlock blockchain operations** by provisioning the infrastructure you need
 
-Built by the team at [QuickNode](http://quicknode.com/), we're trailblazers in blockchain and web3 technology, tirelessly working to simplify blockchain infrastructure. Our combined passion, ingenuity, and dedication pave the way for seamless, high-performance API access across multiple platforms, shaping the future of digital interactions.
+Built by the team at [Quicknode](http://quicknode.com/), we're trailblazers in blockchain and web3 technology, tirelessly working to simplify blockchain infrastructure. Our combined passion, ingenuity, and dedication pave the way for seamless, high-performance API access across multiple platforms, shaping the future of digital interactions.
 
 ---
 
@@ -37,7 +37,7 @@ Add to your config on your `claude_desktop_config.json`, Cursor's `mcp.json` or 
 }
 ```
 
-Replace `<qn-token>` with a QuickNode API token. Can be created on the [QuickNode dashboard](https://dashboard.quicknode.com/api-keys)
+Replace `<qn-token>` with a Quicknode API token. Can be created on the [Quicknode dashboard](https://dashboard.quicknode.com/api-keys)
 
 ---
 
@@ -109,6 +109,6 @@ Then restart Claude/reload Cursor config or similar, you should see resources/to
 We'd love to hear from you! If you have questions, suggestions, or run into any issues:
 
 - 📧 **Email us:** [devex@quicknode.com](mailto:devex@quicknode.com)
-- 🆘 **General support:** [QuickNode Support](https://support.quicknode.com/)
+- 🆘 **General support:** [Quicknode Support](https://support.quicknode.com/)
 
-Your feedback helps us make QuickNode even better! 🚀
+Your feedback helps us make Quicknode even better! 🚀
