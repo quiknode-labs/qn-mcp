@@ -8,14 +8,14 @@
   },
   "server": {
     "type": "node",
-    "entry_point": "server/index.js",
+    "entry_point": "src/index.js",
     "mcp_config": {
       "command": "node",
       "args": [
-        "${__dirname}/server/index.js"
+        "${__dirname}/src/index.js"
       ],
       "env": {
-        "API_KEY": "${user_config.api_key}"
+        "QUICKNODE_API_KEY": "${user_config.api_key}"
       }
     }
   },
