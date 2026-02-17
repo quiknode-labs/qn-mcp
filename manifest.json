@@ -28,7 +28,7 @@
       "sensitive": true
     }
   },
-  "license": "MIT",
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/quiknode-labs/qn-mcp.git"
