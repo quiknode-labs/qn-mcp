@@ -4,7 +4,9 @@
   "version": "0.1.1",
   "description": "MCP Server for building web3 infrastructure with Quicknode",
   "author": {
-    "name": "Quicknode <devex@quicknode.com>"
+    "name": "Quicknode",
+    "email": "devex@quicknode.com",
+    "url": "https://github.com/quiknode-labs"
   },
   "server": {
     "type": "node",
