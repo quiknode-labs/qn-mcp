@@ -30,6 +30,12 @@
       "sensitive": true
     }
   },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.18.0"
+    }
+  },
   "license": "ISC",
   "repository": {
     "type": "git",
