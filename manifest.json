@@ -1,0 +1,44 @@
+{
+  "manifest_version": "0.2",
+  "name": "@quicknode/mcp",
+  "version": "0.1.1",
+  "description": "MCP Server for building web3 infrastructure with Quicknode",
+  "author": {
+    "name": "Quicknode",
+    "email": "devex@quicknode.com",
+    "url": "https://github.com/quiknode-labs"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "src/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/src/index.js"
+      ],
+      "env": {
+        "QUICKNODE_API_KEY": "${user_config.api_key}"
+      }
+    }
+  },
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "Api key",
+      "description": "Quicknode Console API key",
+      "required": true,
+      "sensitive": true
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.18.0"
+    }
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quiknode-labs/qn-mcp.git"
+  }
+}
