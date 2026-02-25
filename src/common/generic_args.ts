@@ -6,13 +6,17 @@ import { isValidIsoString } from "./utils";
 export const timeRangeArgs = {
   start_time: z
     .string()
-    .describe("The start time of the time range (ISO 8601 format)")
+    .describe(
+      'The start time of the time range (ISO 8601 format). Example: "2026-01-01T00:00:00Z"',
+    )
     .refine(isValidIsoString, {
       message: "start_time must be a valid ISO 8601 date string",
     }),
   end_time: z
     .string()
-    .describe("The end time of the time range (ISO 8601 format)")
+    .describe(
+      'The end time of the time range (ISO 8601 format). Example: "2026-01-31T23:59:59Z"',
+    )
     .refine(isValidIsoString, {
       message: "end_time must be a valid ISO 8601 date string",
     }),

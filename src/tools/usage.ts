@@ -7,9 +7,11 @@ export function setUsageTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-rpc-usage",
     {
+      title: "Get RPC Usage",
       description:
         "Get the usage data for the user's QuickNode RPC account. The start_time and end_time parameters are ISO 8601 date strings to filter the usage data by time range",
       inputSchema: { ...genericArgs.timeRangeArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ start_time, end_time }) => {
       const start_time_unix = isoToUnixTimestamp(start_time);
@@ -46,9 +48,11 @@ export function setUsageTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-rpc-usage-by-endpoint",
     {
+      title: "Get RPC Usage by Endpoint",
       description:
         "Get the usage data for the user's QuickNode RPC endpoints. The start_time and end_time parameters are ISO 8601 date strings to filter the usage data by time range",
       inputSchema: { ...genericArgs.timeRangeArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ start_time, end_time }) => {
       const start_time_unix = isoToUnixTimestamp(start_time);
@@ -86,9 +90,11 @@ export function setUsageTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-rpc-usage-by-method",
     {
+      title: "Get RPC Usage by Method",
       description:
         "Get the usage data for the user's QuickNode RPC endpoints, broken down by method. The start_time and end_time parameters are ISO 8601 date strings to filter the usage data by time range",
       inputSchema: { ...genericArgs.timeRangeArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ start_time, end_time }) => {
       const start_time_unix = isoToUnixTimestamp(start_time);
@@ -126,9 +132,11 @@ export function setUsageTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-rpc-usage-by-chain",
     {
+      title: "Get RPC Usage by Chain",
       description:
         "Get the usage data for the user's QuickNode RPC endpoints, broken down by chain. The start_time and end_time parameters are ISO 8601 date strings to filter the usage data by time range",
       inputSchema: { ...genericArgs.timeRangeArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ start_time, end_time }) => {
       const start_time_unix = isoToUnixTimestamp(start_time);

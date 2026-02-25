@@ -28,13 +28,17 @@ const endpointLogsArgs = {
   ...genericArgs.endpointIdArgs,
   from: z
     .string()
-    .describe("The start timestamp for logs (ISO 8601 format)")
+    .describe(
+      'The start timestamp for logs (ISO 8601 format). Example: "2026-01-15T00:00:00Z"',
+    )
     .refine(isValidIsoString, {
       message: "from must be a valid ISO 8601 date string",
     }),
   to: z
     .string()
-    .describe("The end timestamp for logs (ISO 8601 format)")
+    .describe(
+      'The end timestamp for logs (ISO 8601 format). Example: "2026-01-16T00:00:00Z"',
+    )
     .refine(isValidIsoString, {
       message: "to must be a valid ISO 8601 date string",
     }),
@@ -57,11 +61,13 @@ const endpointLogsArgs = {
 const createEndpointArgs = {
   chain: z
     .string()
-    .describe("The blockchain chain (e.g., 'ethereum', 'polygon', 'arbitrum')"),
+    .describe(
+      'Must be a slug from the get-chains tool (e.g., "ethereum", "polygon", "solana", "arbitrum", "base")',
+    ),
   network: z
     .string()
     .describe(
-      "The specific network within the chain (e.g., 'mainnet', 'testnet')",
+      'Must be a slug from the get-chains tool (e.g., "mainnet", "sepolia", "devnet")',
     ),
 };
 
@@ -74,7 +80,9 @@ const endpointMetricArgs = {
       MetricsPeriod.WEEK,
       MetricsPeriod.MONTH,
     ])
-    .describe("The time period for which the data is to be retrieved"),
+    .describe(
+      'The time period for which the data is to be retrieved. One of: "hour", "day", "week", "month"',
+    ),
   metric: z
     .enum([
       MetricsType.METHOD_CALLS_OVER_TIME,
@@ -83,7 +91,9 @@ const endpointMetricArgs = {
       MetricsType.RESPONSE_STATUS_BREAKDOWN,
       MetricsType.METHOD_RESPONSE_TIME_MAX,
     ])
-    .describe("The type of metric to retrieve"),
+    .describe(
+      'The type of metric to retrieve. One of: "method_calls_over_time", "response_status_over_time", "method_call_breakdown", "response_status_breakdown", "method_response_time_max"',
+    ),
 };
 
 const updateRateLimitsArgs = {
@@ -101,11 +111,15 @@ const createMethodRateLimitArgs = {
       RateLimitInterval.MINUTE,
       RateLimitInterval.HOUR,
     ])
-    .describe("The time interval for the rate limit"),
+    .describe(
+      'The time interval for the rate limit. One of: "second", "minute", "hour"',
+    ),
   methods: z
     .array(z.string())
     .min(1)
-    .describe("Array of method names to apply the rate limit to"),
+    .describe(
+      'Array of method names to apply the rate limit to. Example: ["eth_getBalance", "eth_call", "eth_sendRawTransaction"]',
+    ),
   rate: z
     .number()
     .min(1)
@@ -121,11 +135,15 @@ const updateMethodRateLimitArgs = {
     .describe("The unique identifier for the rate limiter"),
   status: z
     .enum([RateLimitStatus.ENABLED, RateLimitStatus.DISABLED])
-    .describe("If the rate limiter should be enabled or disabled"),
+    .describe(
+      'If the rate limiter should be enabled or disabled. One of: "enabled", "disabled"',
+    ),
   methods: z
     .array(z.string())
     .min(1)
-    .describe("Array of method names to apply the rate limit to"),
+    .describe(
+      'Array of method names to apply the rate limit to. Example: ["eth_getBalance", "eth_call", "eth_sendRawTransaction"]',
+    ),
   rate: z
     .number()
     .min(1)
@@ -186,7 +204,9 @@ const createDomainMaskArgs = {
   ...genericArgs.endpointIdArgs,
   domain_mask: z
     .string()
-    .describe("The domain mask that you will use to mask your endpoint"),
+    .describe(
+      'The domain mask that you will use to mask your endpoint. Example: "myapp.example.com"',
+    ),
 };
 
 const deleteDomainMaskArgs = {
@@ -201,7 +221,7 @@ const createIpArgs = {
   ip: z
     .string()
     .describe(
-      "The specific IP address that is allowed to access the API endpoint",
+      'The specific IP address that is allowed to access the API endpoint. Example: "203.0.113.50"',
     ),
 };
 
@@ -233,7 +253,7 @@ const createReferrerArgs = {
   referrer: z
     .string()
     .describe(
-      "The URL or domain that is allowed to access the specific API endpoint",
+      'The URL or domain that is allowed to access the specific API endpoint. Example: "https://myapp.example.com"',
     ),
 };
 
@@ -269,9 +289,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoints",
     {
+      title: "Get Endpoints",
       description:
         "Get web3 QuickNode endpoints for the user, this is a list of all the endpoints that the user has created across all chains and networks. Supports pagination via limit and offset parameters",
       inputSchema: { ...listEndpointsArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ limit, offset }) => {
       const endpoints = await client.listEndpoints(limit, offset);
@@ -290,8 +312,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint",
     {
+      title: "Get Endpoint",
       description: "Get a specific web3 QuickNode endpoint details by id",
       inputSchema: { ...genericArgs.endpointIdArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ endpoint_id }) => {
       const endpoint = await client.getEndpoint(endpoint_id);
@@ -310,9 +334,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-logs",
     {
+      title: "Get Endpoint Logs",
       description:
         "Get the request/response logs for a specific QuickNode endpoint",
       inputSchema: { ...endpointLogsArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ endpoint_id, from, to, limit, include_details, next_at }) => {
       const logs = await client.getEndpointLogs({
@@ -339,9 +365,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-log-details",
     {
+      title: "Get Endpoint Log Details",
       description:
         "Get detailed request and response information for a specific log entry. This provides the raw request payload and full response that were logged for a particular request",
       inputSchema: { ...getLogDetailsArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ endpoint_id, request_id }) => {
       const logDetails = await client.getEndpointLogDetails({
@@ -363,9 +391,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint",
     {
+      title: "Create Endpoint",
       description:
         "Create a new web3 RPC endpoint for a given chain and network under user's QuickNode account. This can error if the chain and network combination is not supported or if the user has reached their endpoint limit, in which case the user should try a different chain and network combination (can request get-chains tool for information on supported chains) or delete an existing endpoint",
       inputSchema: { ...createEndpointArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ chain, network }) => {
       const endpoint = await client.createEndpoint({ chain, network });
@@ -384,9 +414,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint",
     {
+      title: "Delete Endpoint",
       description:
         "Archive a QuickNode endpoint by its ID. This will archive the endpoint and make it inactive. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...genericArgs.endpointIdArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id }) => {
       const result = await client.deleteEndpoint(endpoint_id);
@@ -405,9 +437,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-metrics",
     {
+      title: "Get Endpoint Metrics",
       description:
         "Get metrics for a specific QuickNode endpoint. Supports various metrics like method calls, response status, and response times over different time periods",
       inputSchema: { ...endpointMetricArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ endpoint_id, period, metric }) => {
       const metrics = await client.getEndpointMetrics(endpoint_id, {
@@ -429,9 +463,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "update-endpoint-rate-limits",
     {
+      title: "Update Endpoint Rate Limits",
       description:
         "Update the general rate limits (RPS, RPM, RPD) for a QuickNode endpoint",
       inputSchema: { ...updateRateLimitsArgs },
+      annotations: { readOnlyHint: false, idempotentHint: true },
     },
     async ({ endpoint_id, rps, rpm, rpd }) => {
       const rateLimits = await client.updateRateLimits(endpoint_id, {
@@ -456,9 +492,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-method-rate-limits",
     {
+      title: "Get Endpoint Method Rate Limits",
       description:
         "Get all method rate limits for a specific QuickNode endpoint",
       inputSchema: { ...genericArgs.endpointIdArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ endpoint_id }) => {
       const rateLimits = await client.getMethodRateLimits(endpoint_id);
@@ -477,9 +515,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-method-rate-limit",
     {
+      title: "Create Endpoint Method Rate Limit",
       description:
         "Create a new method-specific rate limiter for a QuickNode endpoint",
       inputSchema: { ...createMethodRateLimitArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ endpoint_id, interval, methods, rate }) => {
       const rateLimit = await client.createMethodRateLimit(endpoint_id, {
@@ -502,9 +542,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "update-endpoint-method-rate-limit",
     {
+      title: "Update Endpoint Method Rate Limit",
       description:
         "Update an existing method-specific rate limit for a QuickNode endpoint",
       inputSchema: { ...updateMethodRateLimitArgs },
+      annotations: { readOnlyHint: false, idempotentHint: true },
     },
     async ({ endpoint_id, method_rate_limit_id, status, methods, rate }) => {
       const rateLimit = await client.updateMethodRateLimit(
@@ -531,9 +573,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-method-rate-limit",
     {
+      title: "Delete Endpoint Method Rate Limit",
       description:
         "Delete a method-specific rate limit from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteMethodRateLimitArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id, method_rate_limit_id }) => {
       const result = await client.deleteMethodRateLimit(
@@ -555,8 +599,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-security-options",
     {
+      title: "Get Endpoint Security Options",
       description: "Get security options for a specific QuickNode endpoint",
       inputSchema: { ...genericArgs.endpointIdArgs },
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ endpoint_id }) => {
       const securityOptions = await client.getSecurityOptions(endpoint_id);
@@ -575,8 +621,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "update-endpoint-security-options",
     {
+      title: "Update Endpoint Security Options",
       description: "Update security options for a specific QuickNode endpoint",
       inputSchema: { ...updateSecurityOptionsArgs },
+      annotations: { readOnlyHint: false, idempotentHint: true },
     },
     async ({
       endpoint_id,
@@ -615,8 +663,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-domain-mask",
     {
+      title: "Create Endpoint Domain Mask",
       description: "Create a domain mask for a QuickNode endpoint",
       inputSchema: { ...createDomainMaskArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ endpoint_id, domain_mask }) => {
       const domainMask = await client.createEndpointSecurityDomainMask(
@@ -640,9 +690,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-domain-mask",
     {
+      title: "Delete Endpoint Domain Mask",
       description:
         "Delete a domain mask from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteDomainMaskArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id, domain_mask_id }) => {
       const result = await client.deleteEndpointSecurityDomainMask(
@@ -664,8 +716,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-ip",
     {
+      title: "Create Endpoint IP Restriction",
       description: "Create an IP restriction for a QuickNode endpoint",
       inputSchema: { ...createIpArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ endpoint_id, ip }) => {
       const ipRule = await client.createEndpointSecurityIp(endpoint_id, { ip });
@@ -684,9 +738,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-ip",
     {
+      title: "Delete Endpoint IP Restriction",
       description:
         "Delete an IP restriction from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteIpArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id, ip_id }) => {
       const result = await client.deleteEndpointSecurityIp(endpoint_id, ip_id);
@@ -705,8 +761,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-jwt",
     {
+      title: "Create Endpoint JWT",
       description: "Create a JWT configuration for a QuickNode endpoint",
       inputSchema: { ...createJwtArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ endpoint_id, public_key, kid, name }) => {
       const jwt = await client.createEndpointSecurityJwt(endpoint_id, {
@@ -729,9 +787,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-jwt",
     {
+      title: "Delete Endpoint JWT",
       description:
         "Delete a JWT configuration from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteJwtArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id, jwt_id }) => {
       const result = await client.deleteEndpointSecurityJwt(
@@ -753,8 +813,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-referrer",
     {
+      title: "Create Endpoint Referrer Restriction",
       description: "Create a referrer restriction for a QuickNode endpoint",
       inputSchema: { ...createReferrerArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ endpoint_id, referrer }) => {
       const referrerRule = await client.createEndpointSecurityReferrer(
@@ -776,9 +838,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-referrer",
     {
+      title: "Delete Endpoint Referrer Restriction",
       description:
         "Delete a referrer restriction from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteReferrerArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id, referrer_id }) => {
       const result = await client.deleteEndpointSecurityReferrer(
@@ -800,8 +864,10 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-token",
     {
+      title: "Create Endpoint Auth Token",
       description: "Create an authentication token for a QuickNode endpoint",
       inputSchema: { ...createTokenArgs },
+      annotations: { readOnlyHint: false },
     },
     async ({ endpoint_id, token }) => {
       const authToken = await client.createEndpointSecurityToken(endpoint_id, {
@@ -822,9 +888,11 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-token",
     {
+      title: "Delete Endpoint Auth Token",
       description:
         "Delete an authentication token from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteTokenArgs },
+      annotations: { readOnlyHint: false, destructiveHint: true },
     },
     async ({ endpoint_id, token_id }) => {
       const result = await client.deleteEndpointSecurityToken(
