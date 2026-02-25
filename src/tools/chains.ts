@@ -5,6 +5,7 @@ export function setChainTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-chains",
     {
+      title: "Get Chains",
       description: "Get all chains supported by QuickNode",
       annotations: { readOnlyHint: true, idempotentHint: true },
     },

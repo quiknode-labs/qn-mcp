@@ -6,6 +6,7 @@ export function setBillingTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-billing-invoices",
     {
+      title: "Get Billing Invoices",
       description: "Get all billing invoices for the user's QuickNode account",
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
@@ -36,6 +37,7 @@ export function setBillingTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-billing-payments",
     {
+      title: "Get Billing Payments",
       description: "Get all billing payments for the user's QuickNode account",
       annotations: { readOnlyHint: true, idempotentHint: true },
     },

@@ -289,6 +289,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoints",
     {
+      title: "Get Endpoints",
       description:
         "Get web3 QuickNode endpoints for the user, this is a list of all the endpoints that the user has created across all chains and networks. Supports pagination via limit and offset parameters",
       inputSchema: { ...listEndpointsArgs },
@@ -311,6 +312,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint",
     {
+      title: "Get Endpoint",
       description: "Get a specific web3 QuickNode endpoint details by id",
       inputSchema: { ...genericArgs.endpointIdArgs },
       annotations: { readOnlyHint: true, idempotentHint: true },
@@ -332,6 +334,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-logs",
     {
+      title: "Get Endpoint Logs",
       description:
         "Get the request/response logs for a specific QuickNode endpoint",
       inputSchema: { ...endpointLogsArgs },
@@ -362,6 +365,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-log-details",
     {
+      title: "Get Endpoint Log Details",
       description:
         "Get detailed request and response information for a specific log entry. This provides the raw request payload and full response that were logged for a particular request",
       inputSchema: { ...getLogDetailsArgs },
@@ -387,6 +391,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint",
     {
+      title: "Create Endpoint",
       description:
         "Create a new web3 RPC endpoint for a given chain and network under user's QuickNode account. This can error if the chain and network combination is not supported or if the user has reached their endpoint limit, in which case the user should try a different chain and network combination (can request get-chains tool for information on supported chains) or delete an existing endpoint",
       inputSchema: { ...createEndpointArgs },
@@ -409,6 +414,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint",
     {
+      title: "Delete Endpoint",
       description:
         "Archive a QuickNode endpoint by its ID. This will archive the endpoint and make it inactive. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...genericArgs.endpointIdArgs },
@@ -431,6 +437,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-metrics",
     {
+      title: "Get Endpoint Metrics",
       description:
         "Get metrics for a specific QuickNode endpoint. Supports various metrics like method calls, response status, and response times over different time periods",
       inputSchema: { ...endpointMetricArgs },
@@ -456,6 +463,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "update-endpoint-rate-limits",
     {
+      title: "Update Endpoint Rate Limits",
       description:
         "Update the general rate limits (RPS, RPM, RPD) for a QuickNode endpoint",
       inputSchema: { ...updateRateLimitsArgs },
@@ -484,6 +492,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-method-rate-limits",
     {
+      title: "Get Endpoint Method Rate Limits",
       description:
         "Get all method rate limits for a specific QuickNode endpoint",
       inputSchema: { ...genericArgs.endpointIdArgs },
@@ -506,6 +515,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-method-rate-limit",
     {
+      title: "Create Endpoint Method Rate Limit",
       description:
         "Create a new method-specific rate limiter for a QuickNode endpoint",
       inputSchema: { ...createMethodRateLimitArgs },
@@ -532,6 +542,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "update-endpoint-method-rate-limit",
     {
+      title: "Update Endpoint Method Rate Limit",
       description:
         "Update an existing method-specific rate limit for a QuickNode endpoint",
       inputSchema: { ...updateMethodRateLimitArgs },
@@ -562,6 +573,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-method-rate-limit",
     {
+      title: "Delete Endpoint Method Rate Limit",
       description:
         "Delete a method-specific rate limit from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteMethodRateLimitArgs },
@@ -587,6 +599,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "get-endpoint-security-options",
     {
+      title: "Get Endpoint Security Options",
       description: "Get security options for a specific QuickNode endpoint",
       inputSchema: { ...genericArgs.endpointIdArgs },
       annotations: { readOnlyHint: true, idempotentHint: true },
@@ -608,6 +621,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "update-endpoint-security-options",
     {
+      title: "Update Endpoint Security Options",
       description: "Update security options for a specific QuickNode endpoint",
       inputSchema: { ...updateSecurityOptionsArgs },
       annotations: { readOnlyHint: false, idempotentHint: true },
@@ -649,6 +663,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-domain-mask",
     {
+      title: "Create Endpoint Domain Mask",
       description: "Create a domain mask for a QuickNode endpoint",
       inputSchema: { ...createDomainMaskArgs },
       annotations: { readOnlyHint: false },
@@ -675,6 +690,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-domain-mask",
     {
+      title: "Delete Endpoint Domain Mask",
       description:
         "Delete a domain mask from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteDomainMaskArgs },
@@ -700,6 +716,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-ip",
     {
+      title: "Create Endpoint IP Restriction",
       description: "Create an IP restriction for a QuickNode endpoint",
       inputSchema: { ...createIpArgs },
       annotations: { readOnlyHint: false },
@@ -721,6 +738,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-ip",
     {
+      title: "Delete Endpoint IP Restriction",
       description:
         "Delete an IP restriction from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteIpArgs },
@@ -743,6 +761,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-jwt",
     {
+      title: "Create Endpoint JWT",
       description: "Create a JWT configuration for a QuickNode endpoint",
       inputSchema: { ...createJwtArgs },
       annotations: { readOnlyHint: false },
@@ -768,6 +787,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-jwt",
     {
+      title: "Delete Endpoint JWT",
       description:
         "Delete a JWT configuration from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteJwtArgs },
@@ -793,6 +813,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-referrer",
     {
+      title: "Create Endpoint Referrer Restriction",
       description: "Create a referrer restriction for a QuickNode endpoint",
       inputSchema: { ...createReferrerArgs },
       annotations: { readOnlyHint: false },
@@ -817,6 +838,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-referrer",
     {
+      title: "Delete Endpoint Referrer Restriction",
       description:
         "Delete a referrer restriction from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteReferrerArgs },
@@ -842,6 +864,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "create-endpoint-security-token",
     {
+      title: "Create Endpoint Auth Token",
       description: "Create an authentication token for a QuickNode endpoint",
       inputSchema: { ...createTokenArgs },
       annotations: { readOnlyHint: false },
@@ -865,6 +888,7 @@ export function setEndpointTools(server: McpServer, client: QuickNodeClient) {
   server.registerTool(
     "delete-endpoint-security-token",
     {
+      title: "Delete Endpoint Auth Token",
       description:
         "Delete an authentication token from a QuickNode endpoint. THIS IS A DESTRUCTIVE ACTION",
       inputSchema: { ...deleteTokenArgs },
