@@ -1,6 +1,6 @@
 {
   "name": "@quicknode/mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP Server for building web3 infrastructure with Quicknode, leading Web3 infrastructure provider",
   "author": "Quicknode <devex@quicknode.com>",
   "repository": {
