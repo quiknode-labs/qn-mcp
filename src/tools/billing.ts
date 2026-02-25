@@ -7,6 +7,7 @@ export function setBillingTools(server: McpServer, client: QuickNodeClient) {
     "get-billing-invoices",
     {
       description: "Get all billing invoices for the user's QuickNode account",
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async () => {
       const invoices = await client.getBillingInvoices();
@@ -36,6 +37,7 @@ export function setBillingTools(server: McpServer, client: QuickNodeClient) {
     "get-billing-payments",
     {
       description: "Get all billing payments for the user's QuickNode account",
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async () => {
       const payments = await client.getBillingPayments();

@@ -6,6 +6,7 @@ export function setChainTools(server: McpServer, client: QuickNodeClient) {
     "get-chains",
     {
       description: "Get all chains supported by QuickNode",
+      annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async () => {
       const chains = await client.getChains();
